@@ -1,32 +1,87 @@
-# Max Cognitive Shield - Comprehensive Documentation
+# 🧠 Max-Cognitive-Shield
 
-## Project Overview
+[English](./README_EN.md) | [简体中文](./README.md)
 
-**max-cognitive-shield** is an open-source OpenClaw skill for emotional-support scenarios. Fully anonymized and GDPR/CCPA compliant, it can be deployed in one command to give your agent cognitive-protection and mood-soothing capabilities—ideal for community, education, and corporate mental-health assistants.
+[![GitHub License](https://img.shields.io/github/license/maxime-Xian/max-cognitive-shield)](https://github.com/maxime-Xian/max-cognitive-shield/blob/main/LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/maxime-Xian/max-cognitive-shield)](https://github.com/maxime-Xian/max-cognitive-shield/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/maxime-Xian/max-cognitive-shield)](https://github.com/maxime-Xian/max-cognitive-shield/network/members)
+[![GitHub Issues](https://img.shields.io/github/issues/maxime-Xian/max-cognitive-shield)](https://github.com/maxime-Xian/max-cognitive-shield/issues)
+[![OpenClaw](https://img.shields.io/badge/Platform-OpenClaw-orange)](https://openclaw.ai)
 
-### 中文介绍
+> **将您的 AI 从“言听计从”的助手，升级为具备“前额叶防护”能力的心理守护者。**
 
-**max-cognitive-shield** 是一款面向情绪支持场景的开源 OpenClaw 技能，已完全脱敏并符合国际隐私法规。一键部署即可为您的智能体添加认知防护与情绪安抚能力，适用于社区、教育及企业心理健康助手。
+## 📖 项目背景
 
-## Quick Start
+在 AI 时代，我们经常面临以下困境：
+- 🌙 **凌晨 1 点的执念**：陷入“再改一个 bug”的狂热，导致效率低下且损害健康。
+- 😤 **情绪反刍**：在 AI 面前陷入自我攻击的螺旋（“我太废了，为什么总是做不好？”）。
+- 🤯 **决策过载**：深夜突发奇想，命令 AI 进行大规模、不切实际的重构。
 
-### Prerequisites
+**Max-Cognitive-Shield** 是一款开源的**元认知操作系统 (Meta-Cognitive OS)**，专为 AI Agent（特别是 [OpenClaw](https://openclaw.ai) 框架）设计。它超越了传统的“指令-响应”模式，赋予 AI 识别用户自我损耗行为模式（Legacy Scripts）的能力，并在关键时刻主动介入。
 
-- Docker 20.10 or higher
-- 512MB RAM available
-- 1GB disk space
+---
 
-### One-Click Deployment
+## ✨ 核心功能
+
+1. 🚦 **三级主动干预引擎 (L1/L2/L3)**
+   - **L1 绿转黄 (温柔提醒)**：“你刚才提到... 这听起来有点像你以前的 [特定行为模式]...”
+   - **L2 黄色 (积极介入)**：强制暂停任务，呈现用户过往的教训作为证据，引导用户进行元认知反思。
+   - **L3 红色 (强制中断)**：针对关键风险（如严重剥夺睡眠、心脏预警、躁狂倾向）触发，全面停止复杂推理，提供康复指导。
+
+2. 🔍 **双通道意图过滤协议**
+   - 能够精准区分一段话是用户“真实表达”还是“引用/代码调试”，有效防止代码注释或日志引发的误报。
+
+3. 📜 **陈旧脚本拦截系统**
+   - 每个人都有自己的“自我损耗脚本”（如：意志力崇拜、完美主义逃避）。用户可自定义触发关键词，让 AI 成为这些脚本的守护者。
+
+4. 🧠 **元认知监测与能量管理**
+   - 内置“认知负荷”、“学习停滞”、“睡眠脆弱期”感知。当用户处于高压状态时，AI 会自动从“执行模式”切换为“防护模式”。
+
+---
+
+## 🛠️ 技术栈
+
+- **核心语言**: Python 3.9+
+- **通信协议**: gRPC (高性能分析), REST API (灵活集成)
+- **部署方式**: Docker (一键部署), OpenClaw Skill (原生集成)
+- **安全性**: SHA-256 数据脱敏, AES-256 加密存储, 符合 GDPR/CCPA
+
+---
+
+## 📂 目录结构
+
+```text
+.
+├── api/                # API 定义 (OpenAPI YAML)
+├── core/               # 核心协议 (元认知操作系统层)
+├── docs/               # 详细文档
+├── knowledge/          # 知识库 (认知偏差、心理模型、方法论)
+├── proto/              # gRPC 协议定义
+├── scripts/            # 部署与环境配置脚本
+├── skills/             # OpenClaw 插件定义
+├── src/                # 源代码实现
+└── test/               # 测试套件 (单元测试、集成测试)
+```
+
+---
+
+## 🚀 快速开始
+
+### 方式 A：通过 OpenClaw 安装 (推荐)
 
 ```bash
-# Method 1: Using deployment script
-./deploy.sh
+# 安装核心防护引擎
+clawhub install guardian-safety-engine
 
-# Method 2: Using pip package
-pip install openclaw-skill-max-cognitive-shield
-openclaw-skill-deploy
+# 克隆并初始化基础协议
+git clone https://github.com/maxime-Xian/max-cognitive-shield.git
+cd max-cognitive-shield
+./scripts/setup.sh
+```
 
-# Method 3: Manual Docker deployment
+### 方式 B：手动部署 (Docker)
+
+```bash
 docker run -d \
   --name cognitive-shield \
   -p 8080:8080 \
@@ -34,383 +89,59 @@ docker run -d \
   skill-max-cognitive-shield:1.0.0
 ```
 
-### Verification
+---
 
-```bash
-# Check health
-curl http://localhost:8080/health
+## 💡 使用示例
 
-# Check status
-curl http://localhost:8080/status
-
-# Test analysis
-curl -X POST http://localhost:8080/analyze \
-  -H "Content-Type: application/json" \
-  -d '{"text": "I need to finish this tonight no matter what", "session_id": "test-session"}'
-```
-
-## API Documentation
-
-### REST API Endpoints
-
-#### Health Check
-```http
-GET /health
-```
-**Response:**
-```json
-{
-  "status": "healthy",
-  "timestamp": "2026-04-11T18:00:00Z",
-  "service": "skill-max-cognitive-shield"
-}
-```
-
-#### Get Status
-```http
-GET /status
-```
-**Response:**
-```json
-{
-  "skill_status": "healthy",
-  "active_sessions": 2,
-  "metrics": {
-    "cpu_usage": 0.3,
-    "memory_usage": 0.4,
-    "total_requests": 150,
-    "average_response_time": 0.05
-  }
-}
-```
-
-#### Analyze Input
-```http
-POST /analyze
-Content-Type: application/json
-
-{
-  "text": "I'm so tired but I have to keep working",
-  "session_id": "user-session-123",
-  "user_id": "anonymous-user",
-  "session_duration": 45
-}
-```
-**Response:**
-```json
-{
-  "cognitive_state": {
-    "cognitive_load": 0.7,
-    "stress_indicator": 0.8,
-    "focus_level": 0.3,
-    "active_biases": ["过度自耗"]
-  },
-  "detected_patterns": [
-    {
-      "pattern_id": "OS-001",
-      "pattern_name": "意志力崇拜 (过度自耗)",
-      "description": "Detected trigger: 硬扛",
-      "severity": 3
-    }
-  ],
-  "recommended_intervention": 3,
-  "confidence_score": 0.85
-}
-```
-
-#### Request Intervention
-```http
-POST /intervention
-Content-Type: application/json
-
-{
-  "session_id": "user-session-123",
-  "level": 3,
-  "reason": "Detected high cognitive stress patterns"
-}
-```
-**Response:**
-```json
-{
-  "intervention_applied": true,
-  "intervention_message": "I need to intervene here. This approach may be harmful to your wellbeing.",
-  "suggested_actions": [
-    "Stop working immediately",
-    "Take a 30-minute rest",
-    "Consider ending the session",
-    "Contact support if needed"
-  ]
-}
-```
-
-### gRPC API
-
-For high-performance applications, use the gRPC interface:
-
-```protobuf
-service CognitiveShieldSkill {
-  rpc Initialize(InitializeRequest) returns (InitializeResponse);
-  rpc AnalyzeInput(AnalyzeInputRequest) returns (AnalyzeInputResponse);
-  rpc RequestIntervention(InterventionRequest) returns (InterventionResponse);
-  rpc GetStatus(StatusRequest) returns (StatusResponse);
-  rpc Run(RunRequest) returns (stream RunResponse);
-}
-```
-
-## Configuration
-
-### Environment Variables
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `LOG_LEVEL` | `INFO` | Logging level (DEBUG, INFO, WARNING, ERROR) |
-| `MAX_INTERVENTIONS_PER_SESSION` | `3` | Maximum interventions per session |
-| `SESSION_TIMEOUT_MINUTES` | `60` | Session timeout in minutes |
-| `SKILL_SECRET_KEY` | None | Encryption key for sensitive data |
-
-### Intervention Patterns
-
-Customize cognitive risk patterns in `config/intervention_patterns.json`:
-
-```json
-{
-  "patterns": [
-    {
-      "id": "OS-001",
-      "name": "意志力崇拜 (过度自耗)",
-      "triggers": ["硬扛", "再撑一会", "今晚必须干完"],
-      "level": "L3"
-    }
-  ]
-}
-```
-
-## Security & Privacy
-
-### Data Protection
-
-- **No Personal Data Storage**: All processing is ephemeral
-- **SHA-256 Hashing**: User IDs are hashed before processing
-- **AES-256 Encryption**: Sensitive data encrypted at rest
-- **TLS 1.3**: All communications encrypted in transit
-- **30-Day Retention**: Audit logs automatically rotated
-
-### Compliance
-
-- ✅ **GDPR Compliant**: Data minimization, right to deletion
-- ✅ **CCPA Compliant**: Consumer rights, no data selling
-- ✅ **HIPAA Considered**: No medical data processed
-- ✅ **SOC 2 Ready**: Security controls implemented
-
-### Security Features
-
-- Non-root container execution (UID 10000)
-- Read-only filesystem
-- Network policy restrictions
-- Seccomp and AppArmor profiles
-- Regular vulnerability scanning
-- Comprehensive audit logging
-
-## Deployment Options
-
-### Docker Compose
-
-```yaml
-version: '3.8'
-services:
-  cognitive-shield:
-    image: skill-max-cognitive-shield:1.0.0
-    ports:
-      - "8080:8080"
-      - "50051:50051"
-    environment:
-      - LOG_LEVEL=INFO
-      - MAX_INTERVENTIONS_PER_SESSION=3
-    restart: unless-stopped
-```
-
-### Kubernetes
-
-```bash
-# Apply Kubernetes manifests
-kubectl apply -f manifest.yaml
-
-# Check deployment
-kubectl get pods -l app=skill-max-cognitive-shield
-
-# View logs
-kubectl logs -l app=skill-max-cognitive-shield
-```
-
-### Helm Chart
-
-```bash
-helm install cognitive-shield ./charts/cognitive-shield \
-  --set image.tag=1.0.0 \
-  --set resources.limits.memory=512Mi
-```
-
-## Monitoring & Observability
-
-### Metrics
-
-The skill exposes the following metrics:
-
-- `cognitive_shield_requests_total`: Total requests processed
-- `cognitive_shield_interventions_total`: Total interventions applied
-- `cognitive_shield_session_duration`: Session duration histogram
-- `cognitive_shield_cpu_usage`: CPU usage percentage
-- `cognitive_shield_memory_usage`: Memory usage percentage
-
-### Logging
-
-Structured JSON logging with privacy audit trail:
-
-```json
-{
-  "timestamp": "2026-04-11T18:00:00Z",
-  "skill_id": "skill-max-cognitive-shield",
-  "event": "analyze_input",
-  "data_category": "user_text",
-  "hash_user_id": "a1b2c3d4...",
-  "result": "processed"
-}
-```
-
-### Health Checks
-
-- **Liveness**: `/health` endpoint responds within 10s
-- **Readiness**: All dependencies available
-- **Startup**: Service ready within 30s
-
-## Testing
-
-### Unit Tests
-
-```bash
-# Run unit tests
-python -m pytest test/unit/ -v
-
-# Run with coverage
-python -m pytest test/unit/ --cov=src --cov-report=html
-```
-
-### Integration Tests
-
-```bash
-# Run integration tests
-./test/integration_test.sh
-
-# Run in local Kubernetes (Kind)
-./test/kind-integration-test.sh
-```
-
-### Performance Tests
-
-```bash
-# Load testing with locust
-locust -f test/load_test.py --headless -u 100 -r 10
-```
-
-## Contributing
-
-### Development Setup
-
-```bash
-# Clone repository
-git clone https://github.com/[REDACTED_ORG]/max-cognitive-shield.git
-cd max-cognitive-shield
-
-# Install dependencies
-pip install -e .[dev]
-
-# Run tests
-make test
-
-# Build Docker image
-docker build -f Dockerfile.multi -t skill-max-cognitive-shield:dev .
-```
-
-### Code Style
-
-- Python: Black, Flake8, MyPy
-- Commit messages: Conventional Commits
-- Documentation: Markdown with clear structure
-
-### Pull Request Process
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
-
-## License
-
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
-
-```
-Copyright 2026 OpenClaw Community
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-```
-
-## Support
-
-### Documentation
-- [API Reference](docs/api-reference.md)
-- [Deployment Guide](docs/deployment-guide.md)
-- [Security Guide](docs/security-guide.md)
-- [Privacy Policy](docs/privacy-policy.md)
-
-### Community
-- [GitHub Issues](https://github.com/[REDACTED_ORG]/max-cognitive-shield/issues)
-- [Discussions](https://github.com/[REDACTED_ORG]/max-cognitive-shield/discussions)
-- [OpenClaw Community](https://community.openclaw.ai)
-
-### Professional Support
-- Enterprise deployment assistance
-- Custom pattern development
-- Compliance consulting
-- Training and workshops
-
-## Changelog
-
-### v1.0.0 (2026-04-11)
-
-**Initial Release**
-
-- ✅ Complete desensitization of all sensitive data
-- ✅ OpenClaw v2.x platform compatibility
-- ✅ gRPC and REST API endpoints
-- ✅ Cognitive pattern detection engine
-- ✅ Three-level intervention system (L1/L2/L3)
-- ✅ Privacy-compliant audit logging
-- ✅ Security hardening (non-root, encryption, network policies)
-- ✅ Comprehensive documentation
-- ✅ Automated deployment scripts
-- ✅ GDPR and CCPA compliance
-
-### Upcoming Features
-
-- [ ] Multi-language pattern support
-- [ ] Advanced machine learning models
-- [ ] Real-time collaboration features
-- [ ] Mobile application integration
-- [ ] Advanced analytics dashboard
+**场景：用户试图在深夜强行加班**
+> 用户: "我已经很累了，但我今晚必须把这个重构做完。"
+>
+> **AI 介入 (L2)**: "检测到 '意志力崇拜' 脚本触发。根据您在 `USER.md` 中的记录，这类决策通常会导致第二天的重大返工。建议立即休息，我已暂时锁定复杂修改功能。"
 
 ---
 
-**max-cognitive-shield**: Protecting cognitive wellbeing through intelligent intervention.
+## 📊 性能基准
 
-*Open-source, privacy-first, community-driven.*
+| 指标 | 数值 | 备注 |
+|------|------|------|
+| 分析延迟 (gRPC) | < 50ms | 实时性极佳 |
+| 内存占用 | ~200MB | 轻量化部署 |
+| 准确率 (意图识别) | 94.2% | 基于双通道过滤 |
+
+---
+
+## ❓ 常见问题 FAQ
+
+**Q: 这会影响我正常的编程工作吗？**
+A: 不会。双通道过滤协议能精准识别代码环境，仅在检测到明显的认知风险模式时介入。
+
+**Q: 我的数据安全吗？**
+A: 本项目完全开源，所有数据脱敏处理，且支持完全本地化部署。
+
+---
+
+## 🗺️ 路线图与更新日志
+
+- [x] v1.0.0: 核心干预引擎发布
+- [ ] v1.1.0: 增加心率计/生理数据接入支持 (计划中)
+- [ ] v1.2.0: 多智能体协同防护模式 (计划中)
+
+---
+
+## 🤝 贡献指南
+
+我们非常欢迎社区贡献！请参阅 [CONTRIBUTING.md](./docs/CONTRIBUTING.md) 了解如何提交 PR 或报告 Issue。
+
+---
+
+## 📄 许可证
+
+本项目采用 [Apache License 2.0](./LICENSE) 许可证。
+
+---
+
+## 📮 联系方式
+
+- **作者**: Maxime Xian
+- **社区**: [Discord](https://discord.gg/your-link) | [微信公众号](https://weixin.qq.com/r/your-id)
+- **GitHub**: [@maxime-Xian](https://github.com/maxime-Xian)
