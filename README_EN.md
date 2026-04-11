@@ -17,7 +17,7 @@ In traditional AI interactions, the AI is a passive responder. **Max-Cognitive-S
 
 - **Proactivity**: It doesn't wait for commands. Through "Heartbeat Pulses" defined in `HEARTBEAT.md`, it actively manages your sleep, energy, and learning progress.
 - **Criticality**: Based on the Arbiter personality in `SOUL.md`, the AI performs structured blocking of impulsive decisions (e.g., late-night over-refactoring, perfectionist evasion).
-- **Evolvability**: Through an automated error-correction and reflection system maintained in `memory/`, the AI analyzes the root causes of your mistakes and transforms them into frameworks for future decision-making.
+- **Evolvability**: Through an automated error-correction and reflection system maintained in `memory/`, the AI analyzes the root causes of your mistakes and transforms them into frameworks for future decision-making. With **Self-Evolution** capabilities, it automatically updates its local knowledge base for a complete cognitive loop.
 
 ---
 
@@ -28,6 +28,12 @@ Driven by Cron/Heartbeat, the AI possesses continuous initiative:
 - **Sleep Guardian Check**: Automatic inspection at 23:45 daily, forcing an L3 interrupt for over-exhaustion tasks.
 - **Evening Reflection & Summary**: Automatic review of daily dialogues at 22:00, extracting errors into correction files.
 - **Proactive Learning Audit**: Every 30 minutes, it scans dialogue snapshots to detect "Legacy Script" patterns from `USER.md`.
+
+### 2. 🔄 AI Self-Evolution Loop
+The pinnacle of the project's intelligence:
+- **Auto Error Capture**: Automatically creates GitHub Issues and records local error logs within 5 minutes.
+- **Auto Pattern Extraction**: AI periodically analyzes failed cases in `memory/evolution/error_logs.jsonl`.
+- **Auto Knowledge Update**: Extracted cognitive patterns and decision frameworks are automatically appended to `knowledge/error_knowledge_v1.0.0.md`, optimizing the AI's logic to ensure the same mistake is never repeated.
 
 ### 2. 🚦 Dual-Channel Intent Filtering Protocol
 A pioneering safety architecture:

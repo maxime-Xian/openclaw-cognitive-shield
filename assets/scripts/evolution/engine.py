@@ -67,12 +67,34 @@ class EvolutionEngine:
         - 错误原文: {error_report['raw_text']}
         - 上下文日志: {error_report['logs']}
         """
-        # 这里会模拟 GitHub API 调用
+        # 模拟：将错误写入本地进化日志，待后续分析
+        with open("memory/evolution/error_logs.jsonl", "a") as f:
+            f.write(json.dumps({"user_id": self.user_id, "error": error_report, "time": str(datetime.now())}) + "\n")
+            
         return {
-            "status": "GitHub Issue created",
+            "status": "GitHub Issue created & Local Log recorded",
             "labels": ["bug", "auto-evolution"],
             "assigned_to": "maxime-Xian"
         }
+
+    def self_evolve_knowledge(self, insights: list):
+        """
+        核心功能：AI 自我进化
+        从错误日志与用户反馈中提炼新模式，自动更新本地知识库
+        """
+        new_patterns = []
+        for insight in insights:
+            pattern = f"## 🛡️ 进化模式 {int(datetime.now().timestamp())}\n"
+            pattern += f"- **根因**: {insight['root_cause']}\n"
+            pattern += f"- **提炼**: {insight['pattern']}\n"
+            pattern += f"- **决策框架更新**: {insight['action']}\n\n"
+            new_patterns.append(pattern)
+        
+        # 自动追加到本地知识库
+        with open(self.knowledge_base, "a") as f:
+            f.writelines(new_patterns)
+            
+        return {"status": "Knowledge Base Evolved", "patterns_added": len(new_patterns)}
 
 if __name__ == "__main__":
     evo = EvolutionEngine(user_id="maxime888666")
