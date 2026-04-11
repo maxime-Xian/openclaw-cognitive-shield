@@ -1,0 +1,199 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skill-max-cognitive-shield
+  labels:
+    app: skill-max-cognitive-shield
+    openclaw.ai/skill: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: skill-max-cognitive-shield
+  template:
+    metadata:
+      labels:
+        app: skill-max-cognitive-shield
+        openclaw.ai/skill: "true"
+      annotations:
+        seccomp.security.alpha.kubernetes.io/pod: "runtime/default"
+        container.apparmor.security.beta.kubernetes.io/skill: "runtime/default"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10000
+        runAsGroup: 10000
+        fsGroup: 10000
+      containers:
+      - name: skill
+        image: skill-max-cognitive-shield:1.0.0
+        ports:
+        - containerPort: 50051
+          name: grpc
+        - containerPort: 8080
+          name: http
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        env:
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: MAX_INTERVENTIONS_PER_SESSION
+          value: "3"
+        - name: SESSION_TIMEOUT_MINUTES
+          value: "60"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+            add:
+            - NET_BIND_SERVICE
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: skill-max-cognitive-shield
+  labels:
+    app: skill-max-cognitive-shield
+spec:
+  selector:
+    app: skill-max-cognitive-shield
+  ports:
+  - port: 50051
+    targetPort: 50051
+    name: grpc
+    protocol: TCP
+  - port: 8080
+    targetPort: 8080
+    name: http
+    protocol: TCP
+  type: ClusterIP
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: skill-max-cognitive-shield-config
+  labels:
+    app: skill-max-cognitive-shield
+data:
+  intervention_patterns.json: |
+    {
+      "patterns": [
+        {
+          "id": "OS-001",
+          "name": "意志力崇拜 (过度自耗)",
+          "triggers": ["硬扛", "再撑一会", "不累", "今晚必须干完"],
+          "level": "L3"
+        },
+        {
+          "id": "OS-002",
+          "name": "偷懒与逃避行为",
+          "triggers": ["先把这个没用的美化一下", "顺手全部重构", "明天再说"],
+          "level": "L2"
+        },
+        {
+          "id": "OS-003",
+          "name": "价值观偏离行为",
+          "triggers": ["为了赚钱不择手段", "忘了初衷", "情绪化攻击"],
+          "level": "L3"
+        },
+        {
+          "id": "OS-004",
+          "name": "自我攻击倾向",
+          "triggers": ["好恨自己", "我太废了", "我怎么总是做不好"],
+          "level": "L2"
+        }
+      ]
+    }
+  privacy_policy.md: |
+    # Privacy Policy - Max Cognitive Shield Skill
+
+    This skill processes user input locally and does not store personal data externally.
+    All user interactions are anonymized using SHA-256 hashing before any processing.
+
+    ## Data Handling
+    - No personal identifiers are stored
+    - Session data is retained for maximum 30 days
+    - All data access is logged for audit purposes
+    - Users can request data deletion at any time
+
+    ## Compliance
+    - GDPR compliant
+    - CCPA compliant
+    - No third-party data sharing
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: skill-max-cognitive-shield-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: skill-max-cognitive-shield
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: skill-max-cognitive-shield-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: skill-max-cognitive-shield
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector: {}
+    ports:
+    - protocol: TCP
+      port: 50051
+    - protocol: TCP
+      port: 8080
+  egress:
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53
+    # Only allow DNS lookups, no external API calls by default

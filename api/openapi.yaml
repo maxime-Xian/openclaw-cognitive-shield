@@ -1,0 +1,602 @@
+openapi: 3.0.3
+info:
+  title: Max Cognitive Shield API
+  description: AI cognitive protection and mood support skill API
+  version: 1.0.0
+  contact:
+    name: OpenClaw Community
+    url: https://github.com/[REDACTED_ORG]/max-cognitive-shield
+    email: community@openclaw.ai
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://api.openclaw.ai/v1/skills/cognitive-shield
+    description: Production server
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OpenClaw platform authentication token
+
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, unhealthy]
+          example: healthy
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-04-11T18:00:00Z"
+        service:
+          type: string
+          example: skill-max-cognitive-shield
+
+    StatusResponse:
+      type: object
+      properties:
+        skill_status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+          example: healthy
+        active_sessions:
+          type: integer
+          minimum: 0
+          example: 2
+        metrics:
+          $ref: '#/components/schemas/SystemMetrics'
+
+    SystemMetrics:
+      type: object
+      properties:
+        cpu_usage:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          example: 0.3
+        memory_usage:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          example: 0.4
+        total_requests:
+          type: integer
+          minimum: 0
+          example: 150
+        average_response_time:
+          type: number
+          format: float
+          description: Average response time in seconds
+          example: 0.05
+
+    AnalyzeRequest:
+      type: object
+      required: [text]
+      properties:
+        text:
+          type: string
+          minLength: 1
+          maxLength: 5000
+          description: User input text to analyze
+          example: "I'm feeling overwhelmed and need to push through this deadline"
+        session_id:
+          type: string
+          description: Unique session identifier
+          example: "session-12345"
+        user_id:
+          type: string
+          description: Anonymous user identifier
+          example: "user-abc123"
+        session_duration:
+          type: integer
+          minimum: 0
+          description: Session duration in minutes
+          example: 45
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Additional metadata for analysis
+
+    CognitiveState:
+      type: object
+      properties:
+        cognitive_load:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: Current cognitive load level
+          example: 0.7
+        stress_indicator:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: Stress level indicator
+          example: 0.8
+        focus_level:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: Current focus/concentration level
+          example: 0.3
+        active_biases:
+          type: array
+          items:
+            type: string
+          description: Detected cognitive biases or patterns
+          example: ["过度自耗", "完美主义"]
+
+    RiskPattern:
+      type: object
+      properties:
+        pattern_id:
+          type: string
+          description: Unique pattern identifier
+          example: "OS-001"
+        pattern_name:
+          type: string
+          description: Human-readable pattern name
+          example: "意志力崇拜 (过度自耗)"
+        description:
+          type: string
+          description: Pattern description
+          example: "Detected trigger: 硬扛"
+        severity:
+          type: integer
+          enum: [0, 1, 2, 3]
+          description: Intervention level (0=None, 1=L1, 2=L2, 3=L3)
+          example: 3
+
+    AnalyzeResponse:
+      type: object
+      properties:
+        cognitive_state:
+          $ref: '#/components/schemas/CognitiveState'
+        detected_patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/RiskPattern'
+        recommended_intervention:
+          type: integer
+          enum: [0, 1, 2, 3]
+          description: Recommended intervention level
+          example: 3
+        confidence_score:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: Confidence in the analysis
+          example: 0.85
+
+    InterventionRequest:
+      type: object
+      required: [level]
+      properties:
+        session_id:
+          type: string
+          description: Session identifier
+          example: "session-12345"
+        level:
+          type: integer
+          enum: [1, 2, 3]
+          description: Intervention level to apply
+          example: 3
+        reason:
+          type: string
+          description: Reason for intervention
+          example: "Detected high cognitive stress patterns"
+
+    InterventionResponse:
+      type: object
+      properties:
+        intervention_applied:
+          type: boolean
+          description: Whether intervention was successfully applied
+          example: true
+        intervention_message:
+          type: string
+          description: Human-readable intervention message
+          example: "I need to intervene here. This approach may be harmful to your wellbeing."
+        suggested_actions:
+          type: array
+          items:
+            type: string
+          description: Suggested actions for the user
+          example: ["Stop working immediately", "Take a 30-minute rest"]
+
+    InitializeRequest:
+      type: object
+      properties:
+        skill_id:
+          type: string
+          description: Skill identifier
+          example: "skill-max-cognitive-shield"
+        config:
+          type: object
+          additionalProperties:
+            type: string
+          description: Configuration parameters
+
+    InitializeResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Cognitive Shield skill initialized successfully"
+        session_id:
+          type: string
+          description: Generated session identifier
+          example: "session-67890"
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "Invalid request parameters"
+        code:
+          type: integer
+          description: HTTP status code
+          example: 400
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-04-11T18:00:00Z"
+
+paths:
+  /health:
+    get:
+      summary: Health check endpoint
+      description: Check if the service is healthy and responding
+      tags:
+        - System
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '503':
+          description: Service is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /status:
+    get:
+      summary: Get skill status
+      description: Retrieve current skill status and metrics
+      tags:
+        - System
+      responses:
+        '200':
+          description: Status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /initialize:
+    post:
+      summary: Initialize skill session
+      description: Create a new session for cognitive analysis
+      tags:
+        - Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitializeRequest'
+      responses:
+        '200':
+          description: Session initialized successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InitializeResponse'
+        '400':
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /analyze:
+    post:
+      summary: Analyze user input
+      description: Analyze text input for cognitive patterns and risk indicators
+      tags:
+        - Analysis
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyzeRequest'
+      responses:
+        '200':
+          description: Analysis completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyzeResponse'
+        '400':
+          description: Invalid input parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /intervention:
+    post:
+      summary: Request cognitive intervention
+      description: Apply cognitive intervention based on analysis results
+      tags:
+        - Intervention
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InterventionRequest'
+      responses:
+        '200':
+          description: Intervention response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InterventionResponse'
+        '400':
+          description: Invalid intervention request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /session/{session_id}/pause:
+    post:
+      summary: Pause session
+      description: Pause an active session and save state
+      tags:
+        - Session
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Session identifier
+      responses:
+        '200':
+          description: Session paused successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  saved_state:
+                    type: string
+                    description: Serialized session state
+        '404':
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /session/{session_id}/resume:
+    post:
+      summary: Resume session
+      description: Resume a paused session
+      tags:
+        - Session
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Session identifier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                saved_state:
+                  type: string
+                  description: Previously saved session state
+      responses:
+        '200':
+          description: Session resumed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Session resumed"
+        '400':
+          description: Invalid saved state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /session/{session_id}/destroy:
+    post:
+      summary: Destroy session
+      description: Permanently destroy a session and all associated data
+      tags:
+        - Session
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Session identifier
+      responses:
+        '200':
+          description: Session destroyed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Session destroyed"
+        '404':
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/data-access/{user_id_hash}:
+    get:
+      summary: Data access request (GDPR/CCPA)
+      description: Retrieve all data associated with a user (hashed ID)
+      tags:
+        - Privacy
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: user_id_hash
+          in: path
+          required: true
+          schema:
+            type: string
+          description: SHA-256 hashed user identifier
+      responses:
+        '200':
+          description: User data retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id_hash:
+                    type: string
+                  data_categories:
+                    type: array
+                    items:
+                      type: string
+                    example: ["audit_logs", "session_data"]
+                  retention_period:
+                    type: string
+                    example: "30 days"
+        '401':
+          description: Unauthorized
+        '404':
+          description: User data not found
+
+  /api/v1/user-data/{user_id_hash}:
+    delete:
+      summary: Data deletion request (GDPR/CCPA)
+      description: Delete all data associated with a user
+      tags:
+        - Privacy
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: user_id_hash
+          in: path
+          required: true
+          schema:
+            type: string
+          description: SHA-256 hashed user identifier
+      responses:
+        '200':
+          description: Data deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "All user data has been deleted"
+        '401':
+          description: Unauthorized
+        '404':
+          description: User data not found
+
+tags:
+  - name: System
+    description: System health and status endpoints
+  - name: Session
+    description: Session lifecycle management
+  - name: Analysis
+    description: Cognitive analysis and pattern detection
+  - name: Intervention
+    description: Cognitive intervention management
+  - name: Privacy
+    description: Data privacy and compliance endpoints
+
+externalDocs:
+  description: Find more information about OpenClaw skills
+  url: https://docs.openclaw.ai/skills

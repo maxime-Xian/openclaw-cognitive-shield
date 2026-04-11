@@ -1,0 +1,67 @@
+FROM python:3.9-slim as builder
+
+WORKDIR /app
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    protobuf-compiler \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Generate protobuf files
+COPY proto/ proto/
+RUN python -m grpc_tools.protoc \
+    --python_out=src/ \
+    --grpc_python_out=src/ \
+    --proto_path=proto/ \
+    proto/*.proto
+
+# === Final Stage ===
+FROM python:3.9-slim
+
+# Create non-root user
+RUN groupadd -g 10000 openclaw && \
+    useradd -u 10000 -g openclaw -s /bin/false openclaw
+
+WORKDIR /app
+
+# Install runtime dependencies only
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && update-ca-certificates
+
+# Copy Python packages from builder
+COPY --from=builder /usr/local/lib/python3.9/site-packages/ /usr/local/lib/python3.9/site-packages/
+COPY --from=builder /usr/local/bin/ /usr/local/bin/
+
+# Create app directory with proper permissions
+RUN mkdir -p /app/src /app/resources /app/logs && \
+    chown -R openclaw:openclaw /app
+
+# Copy application code
+COPY --chown=openclaw:openclaw src/ src/
+COPY --chown=openclaw:openclaw resources/ resources/
+COPY --chown=openclaw:openclaw config/ config/
+COPY --chown=openclaw:openclaw skill.json .
+
+# Switch to non-root user
+USER openclaw
+
+# Create logs directory
+VOLUME /app/logs
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+# Expose ports
+EXPOSE 50051 8080
+
+# Run the application
+CMD ["python", "src/main.py"]

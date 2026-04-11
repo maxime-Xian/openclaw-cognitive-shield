@@ -1,0 +1,57 @@
+{
+  "sensitive_patterns": {
+    "bipolar_disorder": {
+      "patterns": [
+        "双相",
+        "bipolar",
+        "躁狂",
+        "manic",
+        "抑郁",
+        "depression",
+        "情绪障碍",
+        "mood disorder",
+        "心境障碍"
+      ],
+      "replacement": "[MOOD_DISORDER]",
+      "category": "mental_health"
+    },
+    "personal_identifiers": {
+      "patterns": [
+        "maxime.xian",
+        "maxime",
+        "Xian",
+        "@.*\\.com",
+        "@.*\\.cn",
+        "1[3-9]\\\\d{9}",
+        "[0-9]{18}",
+        "[0-9]{15}"
+      ],
+      "replacement": "[REDACTED_PERSONAL]",
+      "category": "personal_info"
+    },
+    "github_repo": {
+      "patterns": [
+        "github.com/maxime-Xian"
+      ],
+      "replacement": "github.com/[REDACTED_ORG]",
+      "category": "personal_info"
+    }
+  },
+  "file_exclusions": [
+    ".git",
+    "node_modules",
+    "__pycache__",
+    ".venv",
+    "dist",
+    ".clawignore"
+  ],
+  "scan_directories": [
+    "core",
+    "docs",
+    "knowledge",
+    "memory",
+    "scripts",
+    "skills",
+    "templates"
+  ]
+}

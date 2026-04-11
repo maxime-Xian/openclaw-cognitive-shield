@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python scripts/desensitize.py .)",
+      "WebSearch",
+      "Bash(chmod +x deploy.sh)",
+      "Bash(python setup_package.py)",
+      "Bash(chmod +x test/integration_test.sh)",
+      "Bash(python package_skill.py)"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+
+grpcio>=1.50.0
+grpcio-tools>=1.50.0
+flask>=2.0.0
+protobuf>=4.0.0
+requests>=2.25.0
+cryptography>=3.4.0
+pyyaml>=6.0
+python-json-logger>=2.0.0
