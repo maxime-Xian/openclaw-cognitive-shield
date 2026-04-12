@@ -1,173 +1,81 @@
 syntax = "proto3";
 
-package skill_max_cognitive_shield;
+package cognitive_shield;
 
-// Skill service definition for cognitive protection
-service CognitiveShieldSkill {
-  // Lifecycle management
-  rpc Initialize(InitializeRequest) returns (InitializeResponse);
-  rpc Run(RunRequest) returns (stream RunResponse);
-  rpc Pause(PauseRequest) returns (PauseResponse);
-  rpc Resume(ResumeRequest) returns (ResumeResponse);
-  rpc Destroy(DestroyRequest) returns (DestroyResponse);
-
-  // Cognitive intervention
-  rpc AnalyzeInput(AnalyzeInputRequest) returns (AnalyzeInputResponse);
-  rpc RequestIntervention(InterventionRequest) returns (InterventionResponse);
-  rpc GetStatus(StatusRequest) returns (StatusResponse);
+// 定义认知状态等级
+enum CognitiveState {
+  STATE_UNKNOWN = 0;
+  NORMAL = 1;      // 能量充足
+  SUBOPTIMAL = 2;  // 能量欠佳
+  LOW = 3;         // 能量低迷
+  CRITICAL = 4;    // 严重损耗
 }
 
-// Lifecycle messages
-message InitializeRequest {
-  string skill_id = 1;
-  map<string, string> config = 2;
+// 定义干预级别
+enum InterventionLevel {
+  LEVEL_NONE = 0;
+  L1 = 1;          // 温和提醒
+  L2 = 2;          // 积极干预
+  L3 = 3;          // 强制中断 (Mode D)
 }
 
-message InitializeResponse {
-  bool success = 1;
-  string message = 2;
-  string session_id = 3;
+// 风险模式定义
+message RiskPattern {
+  string pattern_id = 1;
+  string pattern_name = 2;
+  InterventionLevel level = 3;
+  string description = 4;
 }
 
-message RunRequest {
-  string session_id = 1;
-  UserInput user_input = 2;
+// 用户输入内容
+message UserInput {
+  string text = 1;
+  string intent_type = 2; // Step 0A 的结果
 }
 
-message RunResponse {
-  string response_id = 1;
-  string content = 2;
-  InterventionLevel intervention_level = 3;
-  bool requires_action = 4;
+// 用户上下文 (由 OpenClaw 注入)
+message UserContext {
+  string user_id_hash = 1;
+  string platform = 2;
+  int64 timestamp = 3;
 }
 
-message PauseRequest {
-  string session_id = 1;
-}
-
-message PauseResponse {
-  bool success = 1;
-  string saved_state = 2;
-}
-
-message ResumeRequest {
-  string session_id = 1;
-  string saved_state = 2;
-}
-
-message ResumeResponse {
-  bool success = 1;
-  string message = 2;
-}
-
-message DestroyRequest {
-  string session_id = 1;
-}
-
-message DestroyResponse {
-  bool success = 1;
-  string message = 2;
-}
-
-// Cognitive analysis messages
+// 分析请求
 message AnalyzeInputRequest {
   string session_id = 1;
   UserInput user_input = 2;
   UserContext user_context = 3;
 }
 
+// 分析响应
 message AnalyzeInputResponse {
   CognitiveState cognitive_state = 1;
   repeated RiskPattern detected_patterns = 2;
-  InterventionLevel recommended_intervention = 3;
-  double confidence_score = 4;
+  InterventionLevel intervention_level = 3;
+  int32 pattern_occurrence_count = 4;        // 30天内同类触发次数
+  string intervention_prompt = 5;            // 新增：给LLM的干预文案草稿
+  string evidence_summary = 6;               // 新增：历史证据摘要
 }
 
-message InterventionRequest {
-  string session_id = 1;
-  InterventionLevel level = 2;
-  string reason = 3;
-}
-
-message InterventionResponse {
-  bool intervention_applied = 1;
-  string intervention_message = 2;
-  repeated string suggested_actions = 3;
-}
-
-message StatusRequest {
-  string session_id = 1;
-}
-
-message StatusResponse {
-  string skill_status = 1;
-  int32 active_sessions = 2;
-  SystemMetrics metrics = 3;
-}
-
-// Data structures
-message UserInput {
-  string text = 1;
-  string timestamp = 2;
-  InputType type = 3;
-  map<string, string> metadata = 4;
-}
-
-message UserContext {
+// 心跳扫描请求 (P2)
+message ScanPatternsRequest {
   string user_id_hash = 1;
-  int32 session_duration_minutes = 2;
-  repeated string recent_topics = 3;
-  EnergyLevel energy_level = 4;
-  SleepStatus sleep_status = 5;
+  repeated string recent_messages = 2;
+  int32 scan_window_minutes = 3;
 }
 
-message CognitiveState {
-  double cognitive_load = 1;
-  double stress_indicator = 2;
-  double focus_level = 3;
-  repeated string active_biases = 4;
+// 心跳扫描响应 (P2)
+message ScanPatternsResponse {
+  repeated RiskPattern detected_patterns = 1;
+  bool intervention_needed = 2;
+  string recommended_action = 3;
+  string evidence_summary = 4;
 }
 
-message RiskPattern {
-  string pattern_id = 1;
-  string pattern_name = 2;
-  string description = 3;
-  InterventionLevel severity = 4;
-  repeated string trigger_phrases = 5;
-}
-
-message SystemMetrics {
-  double cpu_usage = 1;
-  double memory_usage = 2;
-  int32 total_requests = 3;
-  double average_response_time = 4;
-}
-
-// Enums
-enum InterventionLevel {
-  NONE = 0;
-  LEVEL_1_MONITOR = 1;      // L1 - Green/Yellow - Gentle reminder
-  LEVEL_2_INTERVENTION = 2;  // L2 - Yellow - Active intervention
-  LEVEL_3_CRITICAL = 3;      // L3 - Red - Forced intervention
-}
-
-enum InputType {
-  TEXT = 0;
-  COMMAND = 1;
-  QUERY = 2;
-  CODE = 3;
-}
-
-enum EnergyLevel {
-  HIGH = 0;
-  MEDIUM = 1;
-  LOW = 2;
-  EXHAUSTED = 3;
-}
-
-enum SleepStatus {
-  WELL_RESTED = 0;
-  MILD_FATIGUE = 1;
-  MODERATE_FATIGUE = 2;
-  SEVERE_FATIGUE = 3;
+service CognitiveShieldSkill {
+  // 核心分析接口
+  rpc AnalyzeInput(AnalyzeInputRequest) returns (AnalyzeInputResponse);
+  
+  // 心跳扫描接口 (P2)
+  rpc ScanPatterns(ScanPatternsRequest) returns (ScanPatternsResponse);
 }

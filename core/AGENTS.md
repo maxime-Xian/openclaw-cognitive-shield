@@ -34,29 +34,42 @@
 
 ### Step 0B：主动脉冲（Proactive Pulse）
 
-仅对 Step 0A 判定为"用户本人 + 有资格"的输入执行。
+① 检索器：调用 guardian-safety-engine
 
-**执行流程（检索 → 诊断 → 策略三级拆分）：**
+**调用方式（OpenClaw Tool Call）：**
+```json
+{
+  "skill_id": "skill-max-cognitive-shield",
+  "action": "AnalyzeInput",
+  "params": {
+    "user_input": "{USER_INPUT}",
+    "intent_type": "{Step_0A_result}",
+    "user_id_hash": "{SESSION.user_id_hash}"
+  }
+}
+```
 
-**① 检索器**：静默搜索历史，不做判断
-- 搜索 `memory/shared/case_index.md` 寻找历史案例
-- 搜索 `knowledge/cognitive_bias_evidence.md` 匹配偏差
-- 输出：`retrieval_results`
+**Skill 返回格式：**
+```json
+{
+  "detected_patterns": [...],
+  "intervention_level": "L1|L2|L3|NONE",
+  "pattern_occurrence_count": 3,
+  "requires_action": true,
+  "intervention_prompt": "...",
+  "evidence_summary": "..."
+}
+```
 
-**② 诊断器**：判断是否同类模式
-- 比对 `USER.md` 安全画像旧脚本关键词
-- 统计同类模式 30 天内出现频次
-- 评估风险等级（低/中/高）
-- 输出：`diagnosis_report`
-
-**③ 策略器**：决定干预级别
-- 调用 `skills/guardian-safety-engine/` 获取完整判定矩阵
-- 根据 `diagnosis_report` 决定 L1/L2/L3
-- 输出：干预决定
+**返回值解读：**
+- **intervention_level = NONE** → 继续正常处理，记录到 .dreams/
+- **intervention_level = L1** → 在回答末尾追加一句提示
+- **intervention_level = L2** → 先给干预分析，再回答表面问题
+- **intervention_level = L3** → 进入 Mode D，完全中断
 
 ---
 
-### Step 0C：决策元认知回溯
+### Step 0C：诊断器（Diagnostician）
 
 **触发条件**：检测到用户在做决策/权衡/提问
 

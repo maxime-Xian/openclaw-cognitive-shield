@@ -16,7 +16,10 @@
 
 ---
 
-## B-01 确认偏差 (Confirmation Bias)
+## 模式ID: B-01
+名称: 确认偏差 (Confirmation Bias)
+触发词: 果然如此, 对方说的不对因为, 证据充分
+级别: L1
 
 **英文**: Confirmation Bias
 **首次提出**: Nickerson, 1998（元分析200+研究）
@@ -37,7 +40,10 @@
 
 ---
 
-## B-02 锚定效应 (Anchoring Effect)
+## 模式ID: B-02
+名称: 锚定效应 (Anchoring Effect)
+触发词: 这个便宜, 按照行业惯例, 原价多少
+级别: L1
 
 **英文**: Anchoring Effect
 **首次提出**: Tversky & Kahneman, 1974
@@ -58,7 +64,10 @@
 
 ---
 
-## B-03 损失厌恶 (Loss Aversion)
+## 模式ID: B-03
+名称: 损失厌恶 (Loss Aversion)
+触发词: 已经投入了, 不卖掉就没亏, 保守一点
+级别: L2
 
 **英文**: Loss Aversion
 **首次提出**: Kahneman & Tversky, 1979（Prospect Theory）
@@ -141,7 +150,10 @@
 
 ---
 
-## B-07 规划谬误 (Planning Fallacy)
+## 模式ID: B-07
+名称: 规划谬误 (Planning Fallacy)
+触发词: 只需要, 很快就好, 肯定能干完
+级别: L2
 
 **英文**: Planning Fallacy
 **首次提出**: Kahneman & Tversky, 1979

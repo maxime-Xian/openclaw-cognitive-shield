@@ -30,13 +30,15 @@
   1. 回顾今日对话，提炼失误和可以优化的部分
   2. 写入 `memory/guardian/reflections/`
 
-### 任务 3：主动学习与错误闭环（心跳巡检）
-- **触发**：每隔一段时间（如 15 或 30 分钟心跳）
-- **触发条件**：
-  1. 读取近期的对话快照
-  2. 扫描 `USER.md` 中的旧脚本（如：硬扛、逃避、自我打压）
-  3. 若命中 ≥3 个特征，调用 `guardian-safety-engine` 并将触发干预
-  4. 任何级别的干预都需附带历史发生过的类似记录
+### 任务 3：主动学习巡检（Proactive Audit）
+- **触发周期**: 每 30 分钟
+- **触发条件**: 过去 30 分钟内有对话更新
+- **执行流程**:
+    1. 收集最近 30 分钟的对话快照。
+    2. 调用 `guardian-safety-engine.ScanPatterns`，传入消息列表。
+    3. **判定逻辑**: 
+        - 若 `intervention_needed=true`，执行对应级别干预并展示 `evidence_summary`。
+        - 若 `intervention_needed=false`，仅回复：`HEARTBEAT_OK`。
 
 ---
 

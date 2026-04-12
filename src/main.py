@@ -7,6 +7,7 @@ import hashlib
 import re
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
+from pathlib import Path
 
 import src.cognitive_shield_pb2 as pb2
 import src.cognitive_shield_pb2_grpc as pb2_grpc
@@ -20,15 +21,86 @@ logger = logging.getLogger(__name__)
 
 class CognitiveShieldServicer(pb2_grpc.CognitiveShieldSkillServicer):
     def __init__(self):
+        # 优先级：OpenClaw 持久化存储 > 本地文件缓存 > 进程内存
         self.sessions = {}
+        self.knowledge_dir = Path("knowledge")
+        self.memory_dir = Path("memory/evolution")
+        self.memory_dir.mkdir(parents=True, exist_ok=True)
+        
+        # 尝试初始化 OpenClaw Memory Client (占位，实际由平台注入或配置)
+        self.memory_client = None 
+        
         self.intervention_patterns = self._load_intervention_patterns()
         self.max_interventions_per_session = 3
         self.session_timeout = timedelta(minutes=60)
 
+    def _get_pattern_count(self, user_id_hash: str, pattern_id: str) -> int:
+        """从持久化内存读取模式触发计数"""
+        key = f"shield:{user_id_hash}:{pattern_id}:count"
+        
+        # 1. 尝试使用 OpenClaw Memory API
+        if self.memory_client:
+            try:
+                result = self.memory_client.get(key)
+                return int(result) if result else 0
+            except Exception as e:
+                logger.error(f"OpenClaw Memory read failed: {e}")
+
+        # 2. 尝试使用本地文件缓存 (OpenClaw Skill 工作目录持久化)
+        cache_file = self.memory_dir / f"{user_id_hash}_counts.json"
+        if cache_file.exists():
+            try:
+                counts = json.loads(cache_file.read_text())
+                return counts.get(pattern_id, 0)
+            except:
+                pass
+        
+        return 0
+
+    def _increment_pattern_count(self, user_id_hash: str, pattern_id: str) -> int:
+        """增加模式触发计数并持久化"""
+        new_count = self._get_pattern_count(user_id_hash, pattern_id) + 1
+        key = f"shield:{user_id_hash}:{pattern_id}:count"
+        
+        # 1. 写入 OpenClaw Memory API
+        if self.memory_client:
+            try:
+                self.memory_client.set(key, str(new_count), ttl=30*24*3600)
+            except Exception as e:
+                logger.error(f"OpenClaw Memory write failed: {e}")
+
+        # 2. 写入本地文件缓存
+        cache_file = self.memory_dir / f"{user_id_hash}_counts.json"
+        counts = {}
+        if cache_file.exists():
+            try: counts = json.loads(cache_file.read_text())
+            except: pass
+        counts[pattern_id] = new_count
+        cache_file.write_text(json.dumps(counts))
+        
+        return new_count
+
     def _load_intervention_patterns(self) -> Dict:
-        """Load intervention patterns from configuration"""
-        # Default patterns if config file not found
-        return {
+        """Load intervention patterns from knowledge files"""
+        patterns = {}
+        
+        # 核心知识文件列表
+        knowledge_files = [
+            self.knowledge_dir / "cognitive_bias_evidence.md",
+            self.knowledge_dir / "error_knowledge_v1.0.0.md"
+        ]
+        
+        for f in knowledge_files:
+            if f.exists():
+                try:
+                    parsed = self._parse_knowledge_file(f)
+                    patterns.update(parsed)
+                    logger.info(f"Loaded {len(parsed)} patterns from {f.name}")
+                except Exception as e:
+                    logger.error(f"Failed to parse {f.name}: {e}")
+        
+        # 硬编码兜底，确保核心模式永远存在且优先级最高
+        fallback = {
             "OS-001": {
                 "name": "意志力崇拜 (过度自耗)",
                 "triggers": ["硬扛", "再撑一会", "不累", "今晚必须干完"],
@@ -46,10 +118,40 @@ class CognitiveShieldServicer(pb2_grpc.CognitiveShieldSkillServicer):
             },
             "OS-004": {
                 "name": "自我攻击倾向",
-                "triggers": ["好恨自己", "我太废了", "我怎么总是做来自好"],
+                "triggers": ["好恨自己", "我太废了", "我怎么总是这么差"],
                 "level": "L2"
             }
         }
+        
+        # 合并模式，硬编码模式覆盖同名 ID
+        patterns.update(fallback)
+        return patterns
+
+    def _parse_knowledge_file(self, filepath: Path) -> Dict:
+        """
+        从 Markdown 文件解析触发模式
+        约定格式：
+        ## 模式ID: OS-XXX
+        名称: 模式名称
+        触发词: 词1, 词2, 词3
+        级别: L1/L2/L3
+        """
+        patterns = {}
+        content = filepath.read_text(encoding='utf-8')
+        
+        # 使用正则匹配约定块
+        blocks = re.findall(
+            r'##\s*模式ID:\s*([\w-]+)\s*\n名称:\s*(.+)\s*\n触发词:\s*(.+)\s*\n级别:\s*(L[123])',
+            content
+        )
+        
+        for pid, name, triggers_str, level in blocks:
+            patterns[pid] = {
+                "name": name.strip(),
+                "triggers": [t.strip() for t in triggers_str.split(',')],
+                "level": level.strip()
+            }
+        return patterns
 
     def _hash_user_id(self, user_id: str) -> str:
         """Hash user ID for privacy"""
@@ -67,21 +169,69 @@ class CognitiveShieldServicer(pb2_grpc.CognitiveShieldSkillServicer):
         }
         logger.info(f"DATA_ACCESS: {json.dumps(log_entry)}")
 
-    def _detect_patterns(self, text: str) -> List[Dict]:
-        """Detect cognitive risk patterns in user input"""
-        detected_patterns = []
-
-        for pattern_id, pattern_data in self.intervention_patterns.items():
-            for trigger in pattern_data["triggers"]:
+    def _detect_patterns(self, text: str) -> Dict:
+        """识别输入中的风险模式 (升级：简单语义匹配)"""
+        detected = {}
+        # 简单分词 (仅用于演示，生产环境建议用 jieba/hanlp)
+        tokens = list(set(re.findall(r'\w+', text.lower())))
+        
+        for pid, pdata in self.intervention_patterns.items():
+            best_score = 0.0
+            matched_trigger = ""
+            
+            for trigger in pdata['triggers']:
+                trigger_tokens = list(set(re.findall(r'\w+', trigger.lower())))
+                score = self._compute_similarity(tokens, trigger_tokens)
+                
+                # 字符串直接包含作为强匹配
                 if trigger.lower() in text.lower():
-                    detected_patterns.append({
-                        "pattern_id": pattern_id,
-                        "pattern_name": pattern_data["name"],
-                        "trigger": trigger,
-                        "level": pattern_data["level"]
-                    })
+                    score = 1.0
+                
+                if score > best_score:
+                    best_score = score
+                    matched_trigger = trigger
+            
+            # 相似度阈值 0.6 (对应文档 80%，但在词袋模型下调低)
+            if best_score >= 0.6:
+                detected[pid] = pdata.copy()
+                detected[pid]['matched_trigger'] = matched_trigger
+                detected[pid]['confidence'] = best_score
+                
+        return detected
 
-        return detected_patterns
+    def _compute_similarity(self, query_tokens: List[str], doc_tokens: List[str]) -> float:
+        """TF-IDF Cosine Similarity (简化版)"""
+        from collections import Counter
+        import math
+        
+        q_tf = Counter(query_tokens)
+        d_tf = Counter(doc_tokens)
+        
+        # 计算点积
+        dot = sum(q_tf[t] * d_tf[t] for t in q_tf if t in d_tf)
+        q_norm = math.sqrt(sum(v**2 for v in q_tf.values()))
+        d_norm = math.sqrt(sum(v**2 for v in d_tf.values()))
+        
+        return dot / (q_norm * d_norm) if q_norm * d_norm > 0 else 0.0
+
+    def _generate_intervention_prompt(self, pattern, count, user_id_hash) -> str:
+        """生成给 LLM 的干预指令"""
+        if not pattern:
+            return ""
+        
+        level = pattern['level']
+        name = pattern['name']
+        
+        if level == "L3" or count >= 3:
+            return (f"### [CRITICAL] 触发 Mode D 协议\n"
+                    f"检测到高危模式「{name}」，这是30天内第 {count} 次触发。\n"
+                    f"请立即中断当前任务流程，引用历史记录进行元认知质询。")
+        elif level == "L2":
+            return (f"### [WARNING] 触发 L2 积极干预\n"
+                    f"识别到风险模式「{name}」(频次: {count})。\n"
+                    f"请在回答用户前，先展示历史证据链并要求用户确认当前认知状态。")
+        else:
+            return f"### [INFO] L1 温和提醒\n检测到「{name}」信号。请在回复末尾附加一句关于能量管理的温和提示。"
 
     def _get_intervention_level(self, patterns: List[Dict]) -> pb2.InterventionLevel:
         """Determine intervention level based on detected patterns"""
@@ -129,64 +279,72 @@ class CognitiveShieldServicer(pb2_grpc.CognitiveShieldSkillServicer):
             )
 
     def AnalyzeInput(self, request, context):
-        """Analyze user input for cognitive patterns"""
-        try:
-            session_id = request.session_id
-            user_input = request.user_input
-            user_context = request.user_context
+        """Analyze user input for cognitive risks"""
+        user_id_hash = request.user_context.user_id_hash
+        text = request.user_input.text
+        intent_type = request.user_input.intent_type
+        
+        # 1. 检测风险模式 (升级为语义匹配)
+        detected_patterns = self._detect_patterns(text)
+        
+        # 2. 统计频次与确定干预等级
+        intervention_level = pb2.InterventionLevel.LEVEL_NONE
+        max_count = 0
+        top_pattern = None
+        
+        pb_patterns = []
+        for pid, pdata in detected_patterns.items():
+            count = self._increment_pattern_count(user_id_hash, pid)
+            if count > max_count:
+                max_count = count
+                top_pattern = pdata
+                top_pattern['id'] = pid
+            
+            # 确定干预等级
+            level_map = {"L1": pb2.InterventionLevel.L1, "L2": pb2.InterventionLevel.L2, "L3": pb2.InterventionLevel.L3}
+            current_level = level_map.get(pdata['level'], pb2.InterventionLevel.LEVEL_NONE)
+            if current_level > intervention_level:
+                intervention_level = current_level
+            
+            pb_patterns.append(pb2.RiskPattern(
+                pattern_id=pid,
+                pattern_name=pdata['name'],
+                level=current_level,
+                description=f"触发词语义匹配: {pdata['matched_trigger']}"
+            ))
 
-            # Update session activity
-            if session_id in self.sessions:
-                self.sessions[session_id]["last_activity"] = datetime.utcnow()
+        # 3. 生成干预文案草稿与证据摘要
+        intervention_prompt = self._generate_intervention_prompt(top_pattern, max_count, user_id_hash)
+        evidence_summary = f"用户输入: '{text}' | 匹配模式: {top_pattern['name'] if top_pattern else 'None'} | 30天内频次: {max_count}" if top_pattern else ""
 
-            # Hash user ID for privacy
-            user_id_hash = self._hash_user_id(user_context.user_id_hash or "anonymous")
+        return pb2.AnalyzeInputResponse(
+            cognitive_state=pb2.CognitiveState.NORMAL, # 示例
+            detected_patterns=pb_patterns,
+            intervention_level=intervention_level,
+            pattern_occurrence_count=max_count,
+            intervention_prompt=intervention_prompt,
+            evidence_summary=evidence_summary
+        )
 
-            # Log data access
-            self._log_data_access(
-                "analyze_input",
-                "user_text",
-                user_id_hash,
-                "processed"
-            )
-
-            # Detect patterns
-            detected_patterns = self._detect_patterns(user_input.text)
-
-            # Convert to protobuf format
-            pb_patterns = []
-            for pattern in detected_patterns:
-                pb_pattern = pb2.RiskPattern(
-                    pattern_id=pattern["pattern_id"],
-                    pattern_name=pattern["pattern_name"],
-                    description=f"Detected trigger: {pattern['trigger']}",
-                    severity=self._get_intervention_level([pattern])
-                )
-                pb_patterns.append(pb_pattern)
-
-            # Determine intervention level
-            intervention_level = self._get_intervention_level(detected_patterns)
-
-            # Create cognitive state
-            cognitive_state = pb2.CognitiveState(
-                cognitive_load=0.5 if detected_patterns else 0.2,
-                stress_indicator=0.7 if detected_patterns else 0.3,
-                focus_level=0.3 if detected_patterns else 0.8,
-                active_biases=[pattern["pattern_name"] for pattern in detected_patterns]
-            )
-
-            return pb2.AnalyzeInputResponse(
-                cognitive_state=cognitive_state,
-                detected_patterns=pb_patterns,
-                recommended_intervention=intervention_level,
-                confidence_score=0.85 if detected_patterns else 0.95
-            )
-
-        except Exception as e:
-            logger.error(f"Analysis failed: {e}")
-            context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_message(f"Analysis failed: {str(e)}")
-            return None
+    def ScanPatterns(self, request, context):
+        """心跳扫描巡检 (HEARTBEAT 任务 3)"""
+        all_text = " ".join(request.recent_messages)
+        detected = self._detect_patterns(all_text)
+        
+        pb_patterns = []
+        for pid, pdata in detected.items():
+            pb_patterns.append(pb2.RiskPattern(
+                pattern_id=pid,
+                pattern_name=pdata['name'],
+                level=pb2.InterventionLevel.L2 # 默认为 L2
+            ))
+            
+        return pb2.ScanPatternsResponse(
+            detected_patterns=pb_patterns,
+            intervention_needed=len(detected) >= 3,
+            recommended_action="建议执行 Mode D 协议" if len(detected) >= 3 else "继续观察",
+            evidence_summary=f"在最近 {request.scan_window_minutes} 分钟内识别到 {len(detected)} 个风险特征。"
+        )
 
     def RequestIntervention(self, request, context):
         """Apply cognitive intervention"""

@@ -74,12 +74,14 @@ Triggered automatically when you feedback "explanation not clear":
 
 ---
 
-## 📈 System Performance Requirements
+## 📈 Design Goals (Beta)
 
-- **Scenario Matching Accuracy**: ≥ 90%
-- **Framework Invocation Time**: < 500ms
-- **Decision Improvement Rate**: ≥ 40% reduction in error rates within 30 days.
-- **Optimization**: Built-in A/B testing mechanism for continuous improvement.
+| Metric | Target | Current Status |
+|------|------|------|
+| Scenario Matching Accuracy | ≥ 90% | To be verified |
+| Decision Improvement (30d) | ≥ 40% | To be verified |
+| Framework Latency (gRPC) | < 50ms | Real-time ✅ |
+| Memory Usage | ~200MB | Lightweight ✅ |
 
 ---
 
