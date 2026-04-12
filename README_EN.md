@@ -7,41 +7,41 @@
 [![GitHub Forks](https://img.shields.io/github/forks/maxime-Xian/max-cognitive-shield)](https://github.com/maxime-Xian/max-cognitive-shield/network/members)
 [![OpenClaw](https://img.shields.io/badge/Platform-OpenClaw-orange)](https://openclaw.ai)
 
-> **Transform your AI from an obedient assistant into an active, protective "Prefrontal Guardian" powered by proactive pulses and meta-cognitive monitoring.**
+> **Evolve your AI from a "obedient assistant" to an active "Prefrontal Guardian" with proactive pulses and meta-cognitive monitoring.**
 
 ---
 
-## 📖 Positioning: What is a "Prefrontal Guardian"?
+## 📖 Project Positioning: What is a "Prefrontal Guardian"?
 
-In traditional AI interactions, the AI is a passive responder. **Max-Cognitive-Shield** is a complete Meta-Cognitive Operating System that, through the core protocols in `core/` and the knowledge libraries in `knowledge/`, empowers the AI with:
+In traditional AI interactions, AI is a passive responder. **Max-Cognitive-Shield** is a complete Meta-Cognitive Operating System that, through core protocols in `core/` and knowledge libraries in `knowledge/`, empowers AI with:
 
-- **Proactivity**: It doesn't wait for commands. Through "Heartbeat Pulses" defined in `HEARTBEAT.md`, it actively manages your sleep, energy, and learning progress.
-- **Criticality**: Based on the Arbiter personality in `SOUL.md`, the AI performs structured blocking of impulsive decisions (e.g., late-night over-refactoring, perfectionist evasion).
-- **Evolvability**: Through an automated error-correction and reflection system maintained in `memory/`, the AI analyzes the root causes of your mistakes and transforms them into frameworks for future decision-making. With **Self-Evolution** capabilities, it automatically updates its local knowledge base for a complete cognitive loop.
+- **Proactivity**: No longer waiting for commands, it actively manages your sleep, energy, and learning progress through "Heartbeat Pulses" set in `HEARTBEAT.md`.
+- **Criticality**: Based on the Arbiter personality in `SOUL.md`, the AI performs structured blocking of your impulsive decisions (e.g., late-night over-refactoring, perfectionist evasion).
+- **Evolvability**: Through an automated error-correction and reflection system maintained in `memory/`, the AI analyzes root causes of your mistakes and transforms them into frameworks for your next decisions. It possesses **Self-Evolution** capabilities, automatically updating the local knowledge base to achieve a cognitive loop.
 
 ---
 
 ## ✨ Core Technical Moats
 
-### 1. 📅 Automated Heartbeat Mechanism
-Driven by Cron/Heartbeat, the AI possesses continuous initiative:
-- **Sleep Guardian Check**: Automatic inspection at 23:45 daily, forcing an L3 interrupt for over-exhaustion tasks.
+### 1. 📅 Automated Heartbeat Mechanism (Heartbeat)
+Driven by Cron/Heartbeat, AI possesses continuous initiative:
+- **Sleep Guardian Check**: Automatic inspection at 23:45, forcing an L3 interrupt for over-exhaustion tasks.
 - **Evening Reflection & Summary**: Automatic review of daily dialogues at 22:00, extracting errors into correction files.
 - **Proactive Learning Audit**: Every 30 minutes, it scans dialogue snapshots to detect "Legacy Script" patterns from `USER.md`.
 
-### 2. 🔄 AI Self-Evolution Loop
+### 2. 🔄 AI Self-Evolution Loop (Self-Evolution)
 The pinnacle of the project's intelligence:
 - **Auto Error Capture**: Automatically creates GitHub Issues and records local error logs within 5 minutes.
 - **Auto Pattern Extraction**: AI periodically analyzes failed cases in `memory/evolution/error_logs.jsonl`.
-- **Auto Knowledge Update**: Extracted cognitive patterns and decision frameworks are automatically appended to `knowledge/error_knowledge_v1.0.0.md`, optimizing the AI's logic to ensure the same mistake is never repeated.
+- **Auto Knowledge Update**: Extracted cognitive patterns and decision frameworks are automatically appended to `knowledge/error_knowledge_v1.0.0.md`, optimizing the AI's logic to ensure "the same mistake is never repeated."
 
-### 2. 🚦 Dual-Channel Intent Filtering Protocol
+### 3. 🚦 Dual-Channel Intent Filtering Protocol (Dual-Channel Filter)
 A pioneering safety architecture:
 - **Channel A (Identity)**: Precisely distinguishes between the user's "true expression" and "quoted content" (code, logs, or competitor analysis).
 - **Channel B (Risk)**: Matches trigger thresholds in the user's safety profile.
 - **Result**: Intervention only triggers on "User Identity + Risk Match," effectively eliminating false positives caused by technical contexts.
 
-### 3. 🧩 Modular Mental Model Integration
+### 4. 🧩 Modular Mental Model Integration
 Automatically invokes the optimal framework for different scenarios:
 - **Decision Dilemmas** → Loads "Trade-off Matrix"
 - **Risk Assessment** → Loads "Probability + Impact Matrix"
@@ -95,6 +95,7 @@ clawhub install guardian-safety-engine
 
 # 2. Clone repo and initialize Meta-Cognitive OS
 git clone https://github.com/maxime-Xian/max-cognitive-shield.git
+cd max-cognitive-shield
 ./scripts/setup.sh
 ```
 
@@ -109,7 +110,7 @@ git clone https://github.com/maxime-Xian/max-cognitive-shield.git
 
 We are looking for contributors interested in **AI Safety**, **Cognitive Science**, and **Meta-Cognitive Architectures**.
 - **Discord**: [Join our Prefrontal Community](https://discord.gg/your-link)
-- **Twitter**: [@MaximeXian](https://twitter.com/MaximeXian)
+- **WeChat Official Account**: Search "MaximeXian"
 
 ---
 
