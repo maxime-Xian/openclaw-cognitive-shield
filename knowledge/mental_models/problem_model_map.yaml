@@ -1,0 +1,23 @@
+# 问题-模型映射库
+# 核心逻辑：根据问题特征自动匹配最佳思维模型
+
+mappings:
+  - id: PMM-001
+    pattern: "决策困境|选哪个|怎么办"
+    model: "Trade-off Matrix (权衡矩阵)"
+    description: "多维度评分，量化最优选项"
+
+  - id: PMM-002
+    pattern: "风险评估|可能会|出事"
+    model: "5x5 Risk Matrix"
+    description: "概率与影响双维度分析"
+
+  - id: PMM-003
+    pattern: "复盘|失误|为什么错了"
+    model: "5Why Root Cause Analysis"
+    description: "连续追问，挖掘深层根因"
+
+  - id: PMM-004
+    pattern: "复杂项目|没头绪|怎么做"
+    model: "SOP Decomposition"
+    description: "结构化拆解行动项"
