@@ -6,8 +6,11 @@
 [![GitHub Stars](https://img.shields.io/github/stars/maxime-Xian/max-cognitive-shield)](https://github.com/maxime-Xian/max-cognitive-shield/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/maxime-Xian/max-cognitive-shield)](https://github.com/maxime-Xian/max-cognitive-shield/network/members)
 [![OpenClaw](https://img.shields.io/badge/Platform-OpenClaw-orange)](https://openclaw.ai)
+[![OpenClaw Compatible](https://img.shields.io/badge/OpenClaw-Compatible-green)](https://docs.openclaw.ai)
 
-> **将您的 AI 从“言听计从”的助手，进化为具备“主动脉冲”与“元认知监测”能力的——前额叶监护人 (Prefrontal Guardian)。**
+---
+
+## 📖 项目定位：什么是“言听计从”的助手，进化为具备“主动脉冲”与“元认知监测”能力的——前额叶监护人 (Prefrontal Guardian)。**
 
 ---
 
@@ -85,24 +88,48 @@
 
 ---
 
-## 📂 架构图谱
+## 📂 优化的 OpenClaw 目录结构
 
 ```text
-.
-├── core/               # 核心协议层 (OS 核心)
-│   ├── SOUL.md         # 仲裁者人格基线与输出风格
-│   ├── AGENTS.md       # 意图双通道过滤与三级干预逻辑
-│   ├── HEARTBEAT.md    # 主动脉冲任务定义
-│   └── IDENTITY.md     # 身份定义：前额叶监护人
-├── knowledge/          # 知识层 (认知闭环)
-│   ├── methodology.md  # 复杂问题拆解 SOP
-│   ├── meta_cognition.md # 认知负荷监测阈值
-│   └── cognitive_bias_evidence.md # 循证偏差库
-├── memory/             # 进化层 (AI 自我迭代)
-│   ├── reflections/    # 晚间反思汇总
-│   └── evolution/      # 决策框架进化记录
-└── skills/             # 插件层 (guardian-safety-engine)
+max-cognitive-shield/
+├── README.md                          # 项目首页（已优化）
+├── ARCHITECTURE.md                    # 详细架构说明
+├── DEPLOYMENT_GUIDE.md                # OpenClaw 专用部署指南
+├── LICENSE
+├── core/                              # 核心协议层（必须注入 OpenClaw）
+│   ├── SOUL.md                        # 仲裁者人格 + 能量感知规则
+│   ├── AGENTS.md                      # 意图过滤 + 三级干预逻辑
+│   ├── IDENTITY.md                    # 前额叶监护人身份定义
+│   └── HEARTBEAT.md                   # 定时任务定义（睡眠守护、晚间总结等）
+├── knowledge/                         # 知识与认知层
+│   ├── methodology.md                 # 复杂问题拆解 SOP
+│   ├── meta_cognition.md              # 元认知阈值与决策框架
+│   ├── cognitive_bias_evidence.md     # 循证偏差库
+│   └── mental_models/                 # 可选：思维模型库
+│       └── problem_model_map.yaml     # 可选：底层模式映射（推荐启用）
+├── memory/                            # 记忆与进化层（重点优化，与 OpenClaw 高度兼容）
+│   ├── daily/                         # OpenClaw 原生每日日志（YYYY-MM-DD.md）
+│   ├── reflections/                   # 晚间反思汇总
+│   ├── evolution/                     # 决策框架与教训进化记录
+│   ├── pending/                       # 【核心防护】写入保护区（强烈推荐）
+│   ├── .status/                       # 隐藏：能量状态、recall 缓存
+│   │   └── energy_status.json         # 睡眠守护输出
+│   └── .dreams/                       # 隐藏：对接 OpenClaw Dreaming 的临时缓存
+├── skills/                            # 插件层（OpenClaw Skill 格式）
+│   ├── guardian-safety-engine/        # 主 Shield 引擎
+│   └── sleep-guardian/                # 睡眠感知插件
+└── scripts/                           # 可立即运行的实用脚本
+    ├── sleep-guardian.js              # 能量感知脚本
+    ├── nightly-summary.py             # 晚间总结 + 错误捕获
+    └── error-capture.py               # 错误自动记录
 ```
+
+### 🎯 结构特点
+
+- **与 OpenClaw 高度兼容**：保留 memory/daily/，便于使用 memory_search 和 QMD
+- **轻量核心 + 可选扩展**：默认轻量运行，pending/ 和 problem_model_map.yaml 可根据需要启用
+- **实际可运行**：scripts/ 目录提供立即可执行的脚本
+- **防护与进化并重**：保留了你最重视的 pending/ 写入保护和进化记录
 
 ---
 
@@ -122,30 +149,85 @@
 
 ---
 
-## 🛠️ 快速部署
+## 🛠️ 快速部署（OpenClaw 优化版）
 
-### A. OpenClaw 原生集成 (推荐)
+### A. OpenClaw 原生集成（强烈推荐）
 ```bash
 # 1. 安装安全引擎
 clawhub install guardian-safety-engine
 
 # 2. 克隆本仓库并初始化元认知 OS
 git clone https://github.com/maxime-Xian/max-cognitive-shield.git
+cd max-cognitive-shield
 ./scripts/setup.sh
+
+# 3. 注册为 OpenClaw skill
+claw skill register max-cognitive-shield \
+  --entry-point skills/guardian-safety-engine \
+  --memory-path memory/ \
+  --config core/
+
+# 4. 配置心跳任务
+claw heartbeat add "sleep-guardian" --schedule "45 23 * * *" --command "python scripts/sleep-guardian.py"
+claw heartbeat add "nightly-summary" --schedule "0 22 * * *" --command "python scripts/nightly-summary.py"
 ```
 
-### B. 通用 Agent 配置 (Cursor/Claude Code/Devin)
-1. 将 `core/` 下的 `.md` 文件移至您的 Agent 工作区根目录。
-2. 将 `knowledge/` 文件夹移入工作区。
-3. 在 `USER.md` 中配置您的安全画像与风险阈值。
+### B. OpenClaw Memory Search 集成
+```bash
+# 启用 memory_search 功能
+claw config set memory.search_enabled true
 
----
+# 搜索历史决策模式
+claw memory search "energy levels" --type daily
+claw memory search "decision framework" --type evolution
 
-## 🤝 贡献与参与
+# QMD 查询核心协议
+claw qmd query SOUL.md "energy awareness"
+claw qmd query AGENTS.md "intervention logic"
+```
 
-我们正在寻找对 **AI 安全性**、**认知科学** 和 **元认知架构** 感兴趣的贡献者。
-- **Discord**: [加入我们的前额叶社区](https://discord.gg/your-link)
-- **微信公众号**: 搜索 "MaximeXian"
+### C. 通用 Agent 配置 (Cursor/Claude Code/Devin)
+1. 将 `core/` 下的 `.md` 文件移至您的 Agent 工作区根目录
+2. 将 `knowledge/` 文件夹移入工作区
+3. 在 `USER.md` 中配置您的安全画像与风险阈值
+4. 设置定时任务执行 scripts/ 中的守护脚本
+
+### D. 使用预构建包
+```bash
+# 使用 OpenClaw CLI 安装
+openclaw skill install skill-max-cognitive-shield-v1.0.0.claw
+
+# 或使用 Docker
+docker load < skill-max-cognitive-shield-v1.0.0.claw
+docker run -d --name cognitive-shield -p 8080:8080 skill-max-cognitive-shield:1.0.0
+```
+
+## ✨ OpenClaw 集成优势
+
+### 🔍 原生 Memory Search 支持
+- **无缝集成**：memory/daily/ 结构完美兼容 OpenClaw 的 memory_search
+- **智能检索**：自动索引决策模式、能量状态和反思记录
+- **QMD 查询**：核心协议支持 Queryable Markdown 查询
+
+### 💭 Dreaming 实验功能
+- **模式识别**：.dreams/ 目录对接 OpenClaw 的 Dreaming 功能
+- **智能缓存**：临时缓存优化认知模式提取
+- **进化加速**：AI 自我进化闭环与 OpenClaw 深度集成
+
+### ⚡ 优化的心跳机制
+- **原生支持**：HEARTBEAT.md 与 OpenClaw 心跳系统完美对接
+- **自动调度**：睡眠守护、晚间总结等任务自动注册
+- **性能优化**：轻量级执行，内存占用 ~200MB
+
+### 🛡️ 增强的安全架构
+- **双通道过滤**：意图判定 + 风险判定，防止误报
+- **写入保护**：pending/ 目录提供核心防护
+- **审计追踪**：所有内存操作完整日志记录
+
+### 🎯 即插即用设计
+- **零配置启动**：scripts/ 目录提供立即可执行脚本
+- **灵活扩展**：可选模块按需启用
+- **多平台支持**：OpenClaw 原生、Docker、Kubernetes
 
 ---
 
