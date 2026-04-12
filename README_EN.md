@@ -45,16 +45,41 @@ The pinnacle of the project's intelligence:
 - **Auto Knowledge Update**: Extracted cognitive patterns and decision frameworks are automatically appended to `knowledge/error_knowledge_v1.0.0.md`, optimizing the AI's logic to ensure "the same mistake is never repeated."
 
 ### 4. 🚦 Dual-Channel Intent Filtering Protocol (Dual-Channel Filter)
-A pioneering safety architecture:
-- **Channel A (Identity)**: Precisely distinguishes between the user's "true expression" and "quoted content" (code, logs, or competitor analysis).
+A pioneering safety architecture acting as a "smart separator," preventing AI from being a repetitive nuisance.
+- **Channel A (Identity)**: Distinguishes between the user's "true expression" and "quoted content" (code, logs, or competitor analysis).
 - **Channel B (Risk)**: Matches trigger thresholds in the user's safety profile.
-- **Result**: Intervention only triggers on "User Identity + Risk Match," effectively eliminating false positives caused by technical contexts.
+- **Example Scenario**:
+    - *False Positive Exclusion*: User pastes a log with "I'm sick of this error" → **AI stays silent** (Identified as log).
+    - *Precise Intervention*: User says "I'm really sick of this, I must finish tonight" → **AI Intervenes** (Identified as self + risk).
 
-### 5. 🧩 Modular Mental Model Integration
-Automatically invokes the optimal framework for different scenarios:
-- **Decision Dilemmas** → Loads "Trade-off Matrix"
-- **Risk Assessment** → Loads "Probability + Impact Matrix"
-- **Learning Review** → Loads "Error Points + Root Cause Analysis"
+### 5. 🎭 Scenario-based Re-explanation Engine
+Triggered automatically when you feedback "explanation not clear":
+- **Library**: 50+ scenarios across Life, Work, and Study.
+- **Structure**: Each explanation includes Background, Role Assumption, Decision Node, and Result Comparison.
+- **Smart Matching**: Uses historical data to select the most relevant scenario for analogy.
+
+### 6. 🧠 Meta-Cognitive Decision Support System
+- **Decision DB**: Records problem type, path, final result, and review for every decision.
+- **Fallacy Detection**: Automatically detects 10+ common thinking errors (e.g., Survivor Bias, Sunk Cost).
+- **Historical Retrieval**: Compares new decisions against history with >80% similarity to avoid making the same mistake twice.
+
+### 7. 🛠️ Scenario-based Framework Auto-invocation System
+- **Decision Dilemma**: Loads "Trade-off Matrix" with ≥6 dimensions, weighting algorithms, and sensitivity analysis.
+- **Risk Assessment**: Invokes "5×5 Risk Matrix" with Monte Carlo simulation and probability distribution maps.
+- **Learning Review**: Activates "Error Point System" (Level 1-10) and "5-Why Root Cause Analysis" down to the 3rd layer.
+
+### 8. 🛡️ Professional Problem-Solving Channels
+- **Emotional Zone**: Integrated 20+ psychological techniques and Emotion-Cognition correlation models.
+- **Complex Analysis Zone**: Mandatory structured methods: System Analysis, Stakeholder Analysis, SWOT, KT Decision, and TRIZ.
+
+---
+
+## 📈 System Performance Requirements
+
+- **Scenario Matching Accuracy**: ≥ 90%
+- **Framework Invocation Time**: < 500ms
+- **Decision Improvement Rate**: ≥ 40% reduction in error rates within 30 days.
+- **Optimization**: Built-in A/B testing mechanism for continuous improvement.
 
 ---
 
