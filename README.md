@@ -8,6 +8,31 @@
 
 专为 **OpenClaw** 设计，轻量集成，即插即用。
 
+---
+
+## 🛡️ 知识产权保护声明
+
+**Prefrontal Shield** 是 **Maxime Xian** 的原创技术成果，受多重知识产权保护：
+
+- ✅ **著作权保护**：所有代码和文档受著作权法保护
+- 🔒 **专利保护**：核心架构已申请发明专利（申请号：2026-OC-001等）
+- 🏷️ **商标保护**："Prefrontal Shield" 商标正在注册中
+- 💧 **数字水印**：代码内置隐式水印，便于侵权追踪
+
+**授权要求：**
+- **个人学习使用**：免费，需保留完整版权声明
+- **商业使用**：需获得书面授权，请联系 licensing@maxime-xian.com
+- **架构授权**：需签署专门的技术授权协议
+
+**详细条款：**
+- [原创性声明](OPENCLAW_ORIGINALITY.md)
+- [商业许可协议](OPENCLAW_COMMERCIAL_LICENSE.md)
+- [技术保护指南](OPENCLAW_PROTECTION_GUIDE.md)
+
+**违规处理：** 对侵权行为采取零容忍政策，保留法律追诉权利。
+
+---
+
 ### ✨ 核心能力
 
 - **能量感知**：根据睡眠时长自动调整回答深度（累的时候绝不给你长篇大论）
@@ -116,6 +141,9 @@ max-cognitive-shield/
 ├── ARCHITECTURE.md                    # 详细架构说明
 ├── DEPLOYMENT_GUIDE.md                # OpenClaw 专用部署指南
 ├── LICENSE
+├── OPENCLAW_ORIGINALITY.md            # 原创性声明与知识产权保护
+├── OPENCLAW_COMMERCIAL_LICENSE.md     # 商业使用许可协议
+├── OPENCLAW_PROTECTION_GUIDE.md       # 技术保护实施指南
 ├── core/                              # 核心协议层（必须注入 OpenClaw）
 │   ├── SOUL.md                        # 仲裁者人格 + 能量感知规则
 │   ├── AGENTS.md                      # 意图过滤 + 三级干预逻辑
@@ -143,3 +171,37 @@ max-cognitive-shield/
     ├── nightly-summary.py             # 晚间总结 + 错误捕获
     └── error-capture.py               # 错误自动记录
 ```
+
+---
+
+## ⚖️ 法律保护与维权
+
+### 技术保护措施
+- 🔐 **数字水印**：代码内置隐式水印系统
+- 🛡️ **架构指纹**：独特的技术特征识别
+- 📊 **使用监控**：自动检测异常使用模式
+- 🔒 **代码混淆**：核心算法保护机制
+
+### 法律保护框架
+- 📝 **著作权法**：保护代码和文档原创性
+- 🏛️ **专利法**：核心技术专利申请中
+- 🏷️ **商标法**：品牌标识法律保护
+- 📋 **合同法**：使用许可法律约束
+
+### 违规处理机制
+- 🚨 **自动检测**：侵权行为自动识别
+- 📋 **证据收集**：完整的侵权证据链
+- ⚖️ **法律诉讼**：专业的法律维权团队
+- 💰 **赔偿追索**：经济损失全额追偿
+
+### 联系方式
+
+- **侵权举报**：legal@maxime-xian.com
+- **授权申请**：licensing@maxime-xian.com
+- **技术支持**：tech@openclaw-shield.com
+- **GitHub Issues**：https://github.com/maxime-Xian/openclaw-cognitive-shield/issues
+
+---
+
+© 2026 Maxime Xian. 保留所有权利。专利技术，侵权必究。
+
