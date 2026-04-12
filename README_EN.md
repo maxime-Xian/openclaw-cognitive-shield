@@ -15,7 +15,7 @@
 
 In traditional AI interactions, AI is a passive responder. **Max-Cognitive-Shield** is a complete Meta-Cognitive Operating System that, through core protocols in `core/` and knowledge libraries in `knowledge/`, empowers AI with:
 
-- **Proactivity**: No longer waiting for commands, it actively manages your sleep, energy, and learning progress through "Heartbeat Pulses" set in `HEARTBEAT.md`.
+- **Proactivity**: No longer waiting for commands, it actively manages your sleep, energy, and learning progress through "Heartbeat Pulses" set in `HEARTBEAT.md`. Equipped with **Energy Awareness**, it automatically adjusts response depth based on system uptime/downtime.
 - **Criticality**: Based on the Arbiter personality in `SOUL.md`, the AI performs structured blocking of your impulsive decisions (e.g., late-night over-refactoring, perfectionist evasion).
 - **Evolvability**: Through an automated error-correction and reflection system maintained in `memory/`, the AI analyzes root causes of your mistakes and transforms them into frameworks for your next decisions. It possesses **Self-Evolution** capabilities, automatically updating the local knowledge base to achieve a cognitive loop.
 
@@ -29,19 +29,28 @@ Driven by Cron/Heartbeat, AI possesses continuous initiative:
 - **Evening Reflection & Summary**: Automatic review of daily dialogues at 22:00, extracting errors into correction files.
 - **Proactive Learning Audit**: Every 30 minutes, it scans dialogue snapshots to detect "Legacy Script" patterns from `USER.md`.
 
-### 2. 🔄 AI Self-Evolution Loop (Self-Evolution)
+### 2. ⚡ Energy Awareness Response Protocol
+The project's most unique human-AI interaction design:
+- **Physical State Mapping**: Monitors actual system power-on/off duration via `sleep-monitor.js` to map the user's physiological energy state.
+- **Dynamic Strategy Adjustment**:
+  - **LOW (<5h Sleep)**: Response limit ≤ 120 words, mandatory rest reminders, complex reasoning disabled.
+  - **SUBOPTIMAL (5-7h Sleep)**: Response limit ≤ 200 words, simplified sentence structures.
+  - **NORMAL (>7h Sleep)**: Full response and deep cognitive tasks enabled.
+- **Advantages**: Zero memory burden, no complex configuration, extremely reliable and network-independent.
+
+### 3. 🔄 AI Self-Evolution Loop (Self-Evolution)
 The pinnacle of the project's intelligence:
 - **Auto Error Capture**: Automatically creates GitHub Issues and records local error logs within 5 minutes.
 - **Auto Pattern Extraction**: AI periodically analyzes failed cases in `memory/evolution/error_logs.jsonl`.
 - **Auto Knowledge Update**: Extracted cognitive patterns and decision frameworks are automatically appended to `knowledge/error_knowledge_v1.0.0.md`, optimizing the AI's logic to ensure "the same mistake is never repeated."
 
-### 3. 🚦 Dual-Channel Intent Filtering Protocol (Dual-Channel Filter)
+### 4. 🚦 Dual-Channel Intent Filtering Protocol (Dual-Channel Filter)
 A pioneering safety architecture:
 - **Channel A (Identity)**: Precisely distinguishes between the user's "true expression" and "quoted content" (code, logs, or competitor analysis).
 - **Channel B (Risk)**: Matches trigger thresholds in the user's safety profile.
 - **Result**: Intervention only triggers on "User Identity + Risk Match," effectively eliminating false positives caused by technical contexts.
 
-### 4. 🧩 Modular Mental Model Integration
+### 5. 🧩 Modular Mental Model Integration
 Automatically invokes the optimal framework for different scenarios:
 - **Decision Dilemmas** → Loads "Trade-off Matrix"
 - **Risk Assessment** → Loads "Probability + Impact Matrix"
