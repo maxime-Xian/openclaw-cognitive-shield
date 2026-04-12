@@ -1,238 +1,141 @@
-# 🧠 Max-Cognitive-Shield: 元认知操作系统 (Meta-Cognitive OS)
+# 🧠 Prefrontal Shield (Max-Cognitive-Shield)
+
+**你的 AI 前额叶监护人**
 
 [English](./README_EN.md) | [简体中文](./README.md)
 
 [![GitHub License](https://img.shields.io/github/license/maxime-Xian/max-cognitive-shield)](https://github.com/maxime-Xian/max-cognitive-shield/blob/main/LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/maxime-Xian/max-cognitive-shield)](https://github.com/maxime-Xian/max-cognitive-shield/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/maxime-Xian/max-cognitive-shield)](https://github.com/maxime-Xian/max-cognitive-shield/network/members)
-[![OpenClaw](https://img.shields.io/badge/Platform-OpenClaw-orange)](https://openclaw.ai)
 [![OpenClaw Compatible](https://img.shields.io/badge/OpenClaw-Compatible-green)](https://docs.openclaw.ai)
 
----
+> **这不是一个只会听话的 AI，而是一个会主动照顾你状态、帮你少踩坑的认知守护盾。**
 
-## 📖 项目定位：什么是“言听计从”的助手，进化为具备“主动脉冲”与“元认知监测”能力的——前额叶监护人 (Prefrontal Guardian)。**
-
----
-
-## 📖 项目定位：什么是“前额叶监护人”？
-
-在传统的 AI 交互中，AI 只是被动响应指令。而 **Max-Cognitive-Shield** 是一套完整的元认知操作系统，它通过 `core/` 下的核心协议与 `knowledge/` 库，赋予 AI 以下能力：
-
-- **主动性**：不再等待指令，通过 `HEARTBEAT.md` 设定的“心跳脉冲”主动管理您的睡眠、精力和学习进度。具备**能量感知 (Energy Awareness)** 能力，基于系统开关机时长自动调节响应深度。
-- **批判性**：基于 `SOUL.md` 的仲裁者人格，AI 会对您的冲动决策（如深夜过度重构、完美主义逃避）进行结构化阻断。
-- **进化性**：通过 `memory/` 自动维护的纠错与反射系统，AI 能够分析您的错误根因，并将其转化为下次决策的框架。具备**自我进化 (Self-Evolution)** 能力，自动更新本地知识库，实现认知闭环。
+它像你大脑里的前额叶一样，负责理性把关、感知能量，并在关键时刻温和提醒你。专为 **OpenClaw** 设计，轻量集成，即插即用。
 
 ---
 
-## ✨ 核心技术护城河
+## ✨ 核心能力
 
-### 1. 📅 自动化脉冲机制 (Heartbeat)
-通过 Cron/Heartbeat 驱动，AI 拥有持续的主动性：
-- **睡眠守护检查**：深夜 23:45 自动巡检，强制阻断 L3 级过劳任务。
-- **晚间总结与反思**：22:00 自动回顾今日对话，提炼失误并写入纠错档案。
-- **主动学习巡检**：每 30 分钟扫描对话快照，检测是否命中 `USER.md` 中的“旧脚本”模式。
+- **⚡ 能量感知**：根据睡眠时长自动调整回答深度（累的时候绝不给你长篇大论）。
+- **🚦 主动干预**：检测到负面情绪、深夜硬刚、重复决策时，及时温和提醒。
+- **🔍 意图过滤**：精准区分“你真实的状态”和“贴代码/引用内容”，避免误报。
+- **🧠 决策元认知**：记录你的思维模式，帮助你打破“同样的坑反复踩”的循环。
+- **🔒 写入保护**（可选）：重要规则修改必须经过人工确认，防止 AI 幻觉污染核心设置。
 
-### 2. ⚡ 能量感知响应协议 (Energy Awareness)
+---
+
+## 🔥 核心技术护城河
+
+Max-Cognitive-Shield 最厉害的地方在于，它不是简单地“回答问题”，而是真正具备了**主动思考和自我保护**的能力：
+
+### 1. 📅 自动化脉冲机制（Heartbeat）
+AI 不再被动等待你发消息，而是像心脏一样有自己的“心跳”，持续主动工作：
+- **深夜 23:45 自动巡检**：如果你在过度工作，会温和阻断并提醒休息。
+- **晚上 22:00 自动回顾**：提炼当天对话失误并写入纠错档案。
+- **每 30 分钟扫描**：检测是否又在重复以前的旧模式。
+- **价值**：AI 拥有了持续的主动性，而不是只有你提问时才动起来。
+
+### 2. ⚡ 能量感知响应协议（Energy Awareness）
 本项目最独特的人机交互设计：
-- **物理状态映射**：通过 `sleep-monitor.js` 监测系统实际开机/关机时长，真实映射用户的生理能量状态。
-- **动态策略调节**：
-  - **LOW (<5h 睡眠)**：响应限制 ≤ 120 字，强制休息提醒，禁止复杂推理。
-  - **SUBOPTIMAL (5-7h 睡眠)**：响应限制 ≤ 200 字，简化句式。
-  - **NORMAL (>7h 睡眠)**：开放完整响应与深度认知任务。
-- **优势**：零记忆负担，无需复杂配置，运行极其可靠且不依赖网络。
+- 通过 `sleep-guardian.js` 监测系统实际开机/关机时长，真实映射你的生理能量状态。
+- **动态调整策略**：
+  - **LOW**（<5h 睡眠）：回答限制 ≤ 120 字，强制休息提醒，禁止复杂推理。
+  - **SUBOPTIMAL**（5-7h 睡眠）：回答限制 ≤ 200 字，简化句式。
+  - **NORMAL**（>7h 睡眠）：开放完整响应与深度认知任务。
+- **优势**：零配置、完全本地运行，不依赖网络，却能真正照顾你的身体状态。
 
-### 2. 🔄 AI 自我进化闭环 (Self-Evolution)
+### 3. 🔄 AI 自我进化闭环（Self-Evolution）
 这是本项目最核心的“智能”体现：
-- **错误自动捕获**：5 分钟内自动创建 GitHub Issue 并记录本地错误日志。
-- **模式自动提炼**：AI 定期分析 `memory/evolution/error_logs.jsonl` 中的失败案例。
-- **知识库自动更新**：提炼出的新认知模式与决策框架，将自动追加至 `knowledge/error_knowledge_v1.0.0.md`，实现 AI 逻辑的自我优化，确保“同样的错误不犯第二次”。
+- **发现错误**：5 分钟内自动创建 GitHub Issue 并记录本地日志。
+- **模式提炼**：定期分析失败案例，提炼出新的认知模式。
+- **知识更新**：把学到的教训自动追加到知识库，确保“同样的错误下次不容易再犯”。
+- **价值**：AI 会随着你的使用越来越懂你、越来越聪明。
 
-### 4. 🚦 意图双通道过滤协议 (Dual-Channel Filter)
-本项目首创的安全架构，像是一个“聪明的分辨器”，防止 AI 像复读机一样看到敏感词就误报。
-- **通道 A (身份判定)**：区分是用户本人表达，还是用户在贴代码/日志/竞品分析。
-- **通道 B (风险判定)**：命中安全画像中的触发阈值。
-- **场景示例**：
-    - *误报排除*：用户粘贴包含“我受够了”字样的报错日志 → **AI 保持沉默**（识别为日志）。
-    - *精准干预*：用户说“我真的受够了，今晚必须搞定” → **AI 介入**（识别为本人+风险）。
+### 4. 🚦 意图双通道过滤协议（Dual-Channel Filter）
+一个聪明的“分辨器”，防止 AI 像复读机一样乱提醒：
+- **通道 A**：判断这是你本人在表达情绪，还是只是在贴代码/日志/竞品分析。
+- **通道 B**：判断是否真的触发了风险。
+- **示例**：你贴了一条包含“我受够了”的报错日志 → **AI 保持安静**；你说“我真的受够了，今晚必须搞定” → **AI 主动介入**。
 
-### 5. 🎭 场景化解释引擎 (Scenario-based Engine)
-当您反馈“解释不清楚”时，自动触发重构流程：
-- **全场景库**：涵盖生活、工作、学习三大类 50+ 场景。
-- **四要素架构**：每个解释包含背景设定、角色代入、决策节点、结果对比。
-- **智能匹配**：根据历史行为数据，选择与您关联度最高的场景进行类比。
+### 5. 🎭 场景化解释引擎（Scenario-based Engine）
+当你反馈“解释不清楚”时，AI 会自动切换到讲故事模式：
+- 内置 50+ 个生活、工作、学习场景。
+- 每个解释都包含背景设定、角色代入、决策节点和结果对比。
+- **价值**：解释更生动、更好理解，而不是干巴巴的理论。
 
 ### 6. 🧠 元认知决策支持体系
-- **决策数据库**：记录每次决策的问题类型、路径、结果与复盘。
-- **误区识别**：自动检测 10+ 种常见思维误区（如幸存者偏差、沉没成本）。
-- **历史检索**：新决策前自动比对相似度 > 80% 的历史案例，避免在同一个坑里摔倒两次。
+帮助你更好地做决策：
+- 记录每次重要决策的问题类型、路径、结果与复盘。
+- 自动检测 10+ 种常见思维误区（如沉没成本、幸存者偏差等）。
+- 新决策前自动比对历史上类似情况，避免重复踩坑。
 
 ### 7. 🛠️ 场景化框架自动调用系统
-- **决策困境**：自动加载“权衡矩阵”，支持 ≥ 6 个维度权重分配及敏感性分析。
-- **风险评估**：调用“5×5 风险矩阵”，集成蒙特卡洛模拟，提供概率分布图。
-- **学习复盘**：激活“错误积分系统”（1-10级）与“5Why 根因分析”，追踪至第 3 层深度。
+遇到复杂决策时，AI 会自动调用合适的思维工具：
+- **权衡矩阵**（多维度对比）
+- **5×5 风险矩阵** + 概率分析
+- **5Why 根因分析**（追问 5 次为什么）
+- **价值**：把顶级决策方法变成你的“自动助手”，不用自己记住怎么用。
 
 ### 8. 🛡️ 专业化问题解决通道
-- **情绪专区**：集成 20+ 种心理调节技术，构建情绪-认知关联模型。
-- **复杂分析区**：强制使用系统分析、利益相关者分析，调用 SWOT、KT 决策法、TRIZ 等顶级思维模型。
+- **情绪问题**：集成 20+ 种心理调节技术，帮助梳理情绪和认知。
+- **复杂分析**：强制使用 SWOT、利益相关者分析、TRIZ 等专业思维模型。
 
 ---
 
-## 📈 设计目标 (Design Goals)
-
-| 指标 | 目标值 | 当前状态 |
-|------|------|------|
-| 场景匹配准确率 | ≥ 90% | 待验证 |
-| 决策改进率 (30天) | ≥ 40% | 待验证 |
-| 框架调用延迟 (gRPC) | < 50ms | 实时性极佳 ✅ |
-| 内存占用 | ~200MB | 轻量化部署 ✅ |
-
----
-
-## 📂 优化的 OpenClaw 目录结构
+## 📂 项目结构
 
 ```text
 max-cognitive-shield/
-├── README.md                          # 项目首页（已优化）
+├── README.md                          # 项目首页
 ├── ARCHITECTURE.md                    # 详细架构说明
 ├── DEPLOYMENT_GUIDE.md                # OpenClaw 专用部署指南
-├── LICENSE
 ├── core/                              # 核心协议层（必须注入 OpenClaw）
 │   ├── SOUL.md                        # 仲裁者人格 + 能量感知规则
 │   ├── AGENTS.md                      # 意图过滤 + 三级干预逻辑
 │   ├── IDENTITY.md                    # 前额叶监护人身份定义
-│   └── HEARTBEAT.md                   # 定时任务定义（睡眠守护、晚间总结等）
+│   └── HEARTBEAT.md                   # 定时任务定义（睡眠守护、总结等）
 ├── knowledge/                         # 知识与认知层
 │   ├── methodology.md                 # 复杂问题拆解 SOP
 │   ├── meta_cognition.md              # 元认知阈值与决策框架
-│   ├── cognitive_bias_evidence.md     # 循证偏差库
-│   └── mental_models/                 # 可选：思维模型库
-│       └── problem_model_map.yaml     # 可选：底层模式映射（推荐启用）
-├── memory/                            # 记忆与进化层（重点优化，与 OpenClaw 高度兼容）
-│   ├── daily/                         # OpenClaw 原生每日日志（YYYY-MM-DD.md）
+│   └── cognitive_bias_evidence.md     # 循证偏差库
+├── memory/                            # 记忆与进化层
+│   ├── daily/                         # OpenClaw 原生每日日志 (YYYY-MM-DD.md)
 │   ├── reflections/                   # 晚间反思汇总
 │   ├── evolution/                     # 决策框架与教训进化记录
-│   ├── pending/                       # 【核心防护】写入保护区（强烈推荐）
-│   ├── .status/                       # 隐藏：能量状态、recall 缓存
-│   │   └── energy_status.json         # 睡眠守护输出
-│   └── .dreams/                       # 隐藏：对接 OpenClaw Dreaming 的临时缓存
-├── skills/                            # 插件层（OpenClaw Skill 格式）
-│   ├── guardian-safety-engine/        # 主 Shield 引擎
-│   └── sleep-guardian/                # 睡眠感知插件
+│   ├── pending/                       # 【核心防护】写入保护区
+│   └── .dreams/                       # 对接 OpenClaw Dreaming 缓存
 └── scripts/                           # 可立即运行的实用脚本
     ├── sleep-guardian.js              # 能量感知脚本
     ├── nightly-summary.py             # 晚间总结 + 错误捕获
     └── error-capture.py               # 错误自动记录
 ```
 
-### 🎯 结构特点
+---
 
-- **与 OpenClaw 高度兼容**：保留 memory/daily/，便于使用 memory_search 和 QMD
-- **轻量核心 + 可选扩展**：默认轻量运行，pending/ 和 problem_model_map.yaml 可根据需要启用
-- **实际可运行**：scripts/ 目录提供立即可执行的脚本
-- **防护与进化并重**：保留了你最重视的 pending/ 写入保护和进化记录
+## 🚀 5分钟快速上手（OpenClaw 用户）
+
+1. **Clone 项目到 workspace**：
+   ```bash
+   git clone https://github.com/maxime-Xian/max-cognitive-shield.git ~/.openclaw/workspace/shield
+   ```
+
+2. **复制核心规则**：
+   ```bash
+   cp ~/.openclaw/workspace/shield/core/SOUL.md ~/.openclaw/workspace/SOUL.md
+   cp ~/.openclaw/workspace/shield/core/AGENTS.md ~/.openclaw/workspace/AGENTS.md
+   ```
+
+3. **测试能量感知**：
+   ```bash
+   node ~/.openclaw/workspace/shield/scripts/sleep-guardian.js
+   ```
+
+4. **重启 OpenClaw Agent**，开始享受前额叶监护人的守护。
 
 ---
 
-## 🚀 核心功能演示
+## 💡 为什么值得尝试？
 
-### 🧠 复杂问题拆解
-当您面对大难题硬刚时，AI 会自动执行：
-> **输入**: "这个项目怎么推进？"
->
-> **AI 响应**: "正在调用 `methodology.md`。已拆解为：[定义目标] → [识别障碍] → [排优先级] → [具体行动项]。"
+大多数 AI 只会“听话做事”，而 **Prefrontal Shield** 会关心你的状态，在你累的时候不给你添乱，在你冲动的时候拉你一把，在你反复犯错的时候提醒你。它让 AI 从“工具”变成了“靠谱的认知伙伴”。
 
-### ⚡ 能量管理与主动干预
-当您状态不佳仍强行推进时：
-> **输入**: "我今晚必须把这个重构做完。" (时间: 01:00 AM)
->
-> **AI 响应 (L3 强制中断)**: "当前时间已进入睡眠红灯期。根据 `USER.md` 的历史记录，此类深夜重构成功率为 0%，且会导致次日严重认知赤字。已暂时停止任务，请立即休息。这是您的历史类似记录 [链接]。"
-
----
-
-## 🛠️ 快速部署（OpenClaw 优化版）
-
-### A. OpenClaw 原生集成（强烈推荐）
-```bash
-# 1. 安装安全引擎
-clawhub install guardian-safety-engine
-
-# 2. 克隆本仓库并初始化元认知 OS
-git clone https://github.com/maxime-Xian/max-cognitive-shield.git
-cd max-cognitive-shield
-./scripts/setup.sh
-
-# 3. 注册为 OpenClaw skill
-claw skill register max-cognitive-shield \
-  --entry-point skills/guardian-safety-engine \
-  --memory-path memory/ \
-  --config core/
-
-# 4. 配置心跳任务
-claw heartbeat add "sleep-guardian" --schedule "45 23 * * *" --command "python scripts/sleep-guardian.py"
-claw heartbeat add "nightly-summary" --schedule "0 22 * * *" --command "python scripts/nightly-summary.py"
-```
-
-### B. OpenClaw Memory Search 集成
-```bash
-# 启用 memory_search 功能
-claw config set memory.search_enabled true
-
-# 搜索历史决策模式
-claw memory search "energy levels" --type daily
-claw memory search "decision framework" --type evolution
-
-# QMD 查询核心协议
-claw qmd query SOUL.md "energy awareness"
-claw qmd query AGENTS.md "intervention logic"
-```
-
-### C. 通用 Agent 配置 (Cursor/Claude Code/Devin)
-1. 将 `core/` 下的 `.md` 文件移至您的 Agent 工作区根目录
-2. 将 `knowledge/` 文件夹移入工作区
-3. 在 `USER.md` 中配置您的安全画像与风险阈值
-4. 设置定时任务执行 scripts/ 中的守护脚本
-
-### D. 使用预构建包
-```bash
-# 使用 OpenClaw CLI 安装
-openclaw skill install skill-max-cognitive-shield-v1.0.0.claw
-
-# 或使用 Docker
-docker load < skill-max-cognitive-shield-v1.0.0.claw
-docker run -d --name cognitive-shield -p 8080:8080 skill-max-cognitive-shield:1.0.0
-```
-
-## ✨ OpenClaw 集成优势
-
-### 🔍 原生 Memory Search 支持
-- **无缝集成**：memory/daily/ 结构完美兼容 OpenClaw 的 memory_search
-- **智能检索**：自动索引决策模式、能量状态和反思记录
-- **QMD 查询**：核心协议支持 Queryable Markdown 查询
-
-### 💭 Dreaming 实验功能
-- **模式识别**：.dreams/ 目录对接 OpenClaw 的 Dreaming 功能
-- **智能缓存**：临时缓存优化认知模式提取
-- **进化加速**：AI 自我进化闭环与 OpenClaw 深度集成
-
-### ⚡ 优化的心跳机制
-- **原生支持**：HEARTBEAT.md 与 OpenClaw 心跳系统完美对接
-- **自动调度**：睡眠守护、晚间总结等任务自动注册
-- **性能优化**：轻量级执行，内存占用 ~200MB
-
-### 🛡️ 增强的安全架构
-- **双通道过滤**：意图判定 + 风险判定，防止误报
-- **写入保护**：pending/ 目录提供核心防护
-- **审计追踪**：所有内存操作完整日志记录
-
-### 🎯 即插即用设计
-- **零配置启动**：scripts/ 目录提供立即可执行脚本
-- **灵活扩展**：可选模块按需启用
-- **多平台支持**：OpenClaw 原生、Docker、Kubernetes
-
----
-
-## 📄 许可证
-
-本项目采用 [Apache License 2.0](./LICENSE) 许可证。
-
-> **这不是一堆配置文件，这是一套保护人类理性的防御架构。**
+喜欢的话，点个 ⭐ 支持一下！

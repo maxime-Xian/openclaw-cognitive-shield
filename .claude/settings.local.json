@@ -6,7 +6,9 @@
       "Bash(chmod +x deploy.sh)",
       "Bash(python setup_package.py)",
       "Bash(chmod +x test/integration_test.sh)",
-      "Bash(python package_skill.py)"
+      "Bash(python package_skill.py)",
+      "Bash(git add:*)",
+      "Bash(git commit -m 'Feat: OpenClaw optimization - Complete directory structure, enhanced README, and deployment guide:*)"
     ]
   }
 }
