@@ -1,0 +1,286 @@
+---
+name: guardian-safety-engine
+version: "1.0.0"
+display_name: "Guardian Safety Engine"
+description: "Cognitive protection and safety intervention system with three-level intervention protocol (L1 gentle reminder/L2 active intervention/L3 forced interruption) and dynamic pulse monitoring. Capable of automatically detecting lazy behavior, value deviation, and high-risk actions."
+authors:
+  - name: "Maxime Xian"
+    email: "maxime@openclaw-shield.com"
+    github: "maxime-Xian"
+license: "Apache-2.0"
+homepage: "https://github.com/maxime-Xian/openclaw-cognitive-shield"
+repository: "https://github.com/maxime-Xian/openclaw-cognitive-shield/tree/main/skills/guardian-safety-engine"
+
+# 技能分类
+category: "cognitive-protection"
+tags:
+  - "safety"
+  - "intervention"
+  - "cognitive-shield"
+  - "decision-support"
+  - "guardian"
+  - "risk-assessment"
+
+# 依赖关系
+dependencies:
+  - name: "openclaw-core"
+    version: ">=1.0.0"
+    required: true
+  - name: "memory-system"
+    version: ">=1.0.0"
+    required: true
+  - name: "user-profile"
+    version: ">=1.0.0"
+    required: false
+
+# 配置文件
+config:
+  # 干预级别阈值
+  intervention_levels:
+    l1_threshold: 0.3
+    l2_threshold: 0.6
+    l3_threshold: 0.9
+
+  # 监控配置
+  monitoring:
+    check_interval: 300  # 5分钟（秒）
+    history_window: 2592000  # 30天（秒）
+    max_history_entries: 1000
+
+  # 风险分析配置
+  risk_analysis:
+    emotion_weight: 0.3
+    cognitive_load_weight: 0.25
+    time_context_weight: 0.2
+    pattern_match_weight: 0.25
+    min_confidence: 0.7
+
+  # 响应配置
+  response:
+    max_response_length: 500
+    include_evidence: true
+    show_confidence: true
+    enable_debug_mode: false
+
+  # 日志配置
+  logging:
+    level: "INFO"
+    enable_file_logging: true
+    log_file_path: "logs/guardian-safety-engine.log"
+    max_log_size: "10MB"
+    backup_count: 5
+
+# 输入输出接口
+interfaces:
+  input:
+    - name: "user_input"
+      type: "text"
+      required: true
+      description: "User's current input or query"
+      constraints:
+        min_length: 1
+        max_length: 2000
+
+    - name: "context"
+      type: "json"
+      required: true
+      description: "Current conversation context"
+      schema:
+        type: "object"
+        properties:
+          time:
+            type: "string"
+            format: "time"
+            description: "Current time (HH:MM format)"
+          sleep_hours:
+            type: "number"
+            minimum: 0
+            maximum: 24
+            description: "Hours of sleep user got"
+          stress_level:
+            type: "number"
+            minimum: 0
+            maximum: 10
+            description: "User's current stress level"
+          conversation_history:
+            type: "array"
+            items:
+              type: "object"
+            description: "Recent conversation history"
+        required: ["time"]
+
+    - name: "user_profile"
+      type: "json"
+      required: false
+      description: "User's cognitive profile and preferences"
+      schema:
+        type: "object"
+        properties:
+          cognitive_style:
+            type: "string"
+            enum: ["analytical", "intuitive", "balanced"]
+          risk_tolerance:
+            type: "number"
+            minimum: 0
+            maximum: 1
+          intervention_preferences:
+            type: "object"
+            properties:
+              preferred_intervention_level:
+                type: "string"
+                enum: ["gentle", "moderate", "strict"]
+              quiet_hours:
+                type: "array"
+                items:
+                  type: "string"
+                  format: "time"
+
+  output:
+    - name: "analysis_result"
+      type: "json"
+      required: true
+      description: "Complete risk analysis result"
+      schema:
+        type: "object"
+        properties:
+          risk_score:
+            type: "number"
+            minimum: 0
+            maximum: 1
+            description: "Calculated risk score"
+          intervention_level:
+            type: "string"
+            enum: ["none", "L1", "L2", "L3"]
+            description: "Recommended intervention level"
+          intervention_message:
+            type: "string"
+            description: "Formatted intervention message"
+          confidence:
+            type: "number"
+            minimum: 0
+            maximum: 1
+            description: "Confidence level of the analysis"
+          evidence:
+            type: "array"
+            items:
+              type: "object"
+            description: "Supporting evidence for the decision"
+          timestamp:
+            type: "string"
+            format: "date-time"
+            description: "Analysis timestamp"
+          metadata:
+            type: "object"
+            description: "Additional analysis metadata"
+        required: ["risk_score", "intervention_level", "confidence", "timestamp"]
+
+    - name: "debug_info"
+      type: "json"
+      required: false
+      description: "Debug information (only when debug mode enabled)"
+      schema:
+        type: "object"
+        properties:
+          feature_extraction:
+            type: "object"
+            description: "Extracted features from input"
+          pattern_matches:
+            type: "array"
+            items:
+              type: "object"
+            description: "Matched historical patterns"
+          calculation_steps:
+            type: "array"
+            items:
+              type: "object"
+            description: "Step-by-step calculation details"
+
+# 权限要求
+permissions:
+  - name: "read_memory"
+    description: "Read access to user's memory and history"
+    required: true
+  - name: "write_logs"
+    description: "Write access to system logs"
+    required: true
+  - name: "access_user_profile"
+    description: "Read access to user profile data"
+    required: false
+  - name: "read_conversation_history"
+    description: "Read access to conversation history"
+    required: true
+
+# 资源限制
+resources:
+  memory_limit: "100MB"
+  cpu_limit: "0.5"
+  timeout: 30
+  max_concurrent_requests: 10
+
+# 健康检查
+health_check:
+  endpoint: "/health"
+  timeout: 5
+  interval: 60
+
+# 监控指标
+metrics:
+  - name: "risk_analysis_requests"
+    type: "counter"
+    description: "Total number of risk analysis requests"
+  - name: "intervention_triggered"
+    type: "counter"
+    description: "Number of interventions triggered by level"
+    labels: ["level"]
+  - name: "analysis_duration"
+    type: "histogram"
+    description: "Risk analysis request duration"
+    buckets: [0.01, 0.05, 0.1, 0.5, 1.0]
+  - name: "error_count"
+    type: "counter"
+    description: "Number of errors by type"
+    labels: ["error_type"]
+
+# 环境变量
+environment:
+  - name: "GUARDIAN_LOG_LEVEL"
+    default: "INFO"
+    description: "Logging level for the guardian engine"
+  - name: "GUARDIAN_DEBUG_MODE"
+    default: "false"
+    description: "Enable debug mode for detailed logging"
+  - name: "GUARDIAN_MAX_MEMORY"
+    default: "100MB"
+    description: "Maximum memory usage limit"
+
+# 安装配置
+installation:
+  requirements:
+    - "python>=3.8"
+    - "openclaw-core>=1.0.0"
+    - "memory-system>=1.0.0"
+  files:
+    - "SKILL.md"
+    - "manifest.yaml"
+    - "main.py"
+    - "config/"
+    - "tests/"
+    - "docs/"
+
+# 版本历史
+changelog:
+  - version: "1.0.0"
+    date: "2026-04-12"
+    changes:
+      - "Initial release with complete cognitive protection features"
+      - "Three-level intervention system (L1/L2/L3)"
+      - "Dynamic pulse monitoring and risk assessment"
+      - "Comprehensive error handling and logging"
+      - "Performance monitoring and metrics"
+
+# 支持信息
+support:
+  documentation: "https://github.com/maxime-Xian/openclaw-cognitive-shield/blob/main/skills/guardian-safety-engine/README.md"
+  issues: "https://github.com/maxime-Xian/openclaw-cognitive-shield/issues"
+  contact: "support@openclaw-shield.com"
+  license_url: "https://github.com/maxime-Xian/openclaw-cognitive-shield/blob/main/LICENSE"

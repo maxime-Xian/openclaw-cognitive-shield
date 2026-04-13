@@ -1,0 +1,329 @@
+---
+name: sleep-guardian
+version: "1.0.0"
+display_name: "Sleep Guardian"
+description: "Real-time monitoring and awareness system for user's sleep and energy states. Provides dynamic response depth adjustment for AI agents based on physiological conditions."
+authors:
+  - name: "Maxime Xian"
+    email: "maxime@openclaw-shield.com"
+    github: "maxime-Xian"
+license: "Apache-2.0"
+homepage: "https://github.com/maxime-Xian/openclaw-cognitive-shield"
+repository: "https://github.com/maxime-Xian/openclaw-cognitive-shield/tree/main/skills/sleep-guardian"
+
+# 技能分类
+category: "health-monitoring"
+tags:
+  - "sleep"
+  - "energy"
+  - "monitoring"
+  - "health"
+  - "awareness"
+  - "wellbeing"
+
+# 依赖关系
+dependencies:
+  - name: "openclaw-core"
+    version: ">=1.0.0"
+    required: true
+  - name: "system-monitor"
+    version: ">=1.0.0"
+    required: true
+
+# 配置文件
+config:
+  # 监控配置
+  monitoring:
+    check_interval: 300  # 5分钟（秒）
+    heartbeat_interval: 60  # 1分钟（秒）
+    max_missed_heartbeats: 3
+
+  # 睡眠检测配置
+  sleep_detection:
+    min_sleep_duration: 1800  # 30分钟（秒）
+    max_awake_duration: 86400  # 24小时（秒）
+    sleep_probability_threshold: 0.8
+
+  # 能量状态阈值
+  energy_thresholds:
+    low_sleep: 5  # 小时
+    optimal_sleep: 7  # 小时
+    max_continuous_work: 12  # 小时
+
+  # 响应策略配置
+  response_strategies:
+    low_energy:
+      max_response_length: 120
+      complexity_limit: "simple"
+      enable_complex_reasoning: false
+      mandatory_rest_reminder: true
+
+    suboptimal_energy:
+      max_response_length: 200
+      complexity_limit: "moderate"
+      enable_complex_reasoning: true
+      simplified_explanations: true
+
+    normal_energy:
+      max_response_length: 1000
+      complexity_limit: "full"
+      enable_complex_reasoning: true
+      detailed_explanations: true
+
+  # 提醒配置
+  reminders:
+    rest_reminder_interval: 7200  # 2小时（秒）
+    break_reminder_interval: 3600  # 1小时（秒）
+    sleep_reminder_threshold: "22:00"  # 时间
+    max_daily_reminders: 10
+
+  # 日志配置
+  logging:
+    level: "INFO"
+    enable_file_logging: true
+    log_file_path: "logs/sleep-guardian.log"
+    max_log_size: "5MB"
+    backup_count: 3
+
+# 输入输出接口
+interfaces:
+  input:
+    - name: "system_status"
+      type: "json"
+      required: true
+      description: "Current system status and user activity"
+      schema:
+        type: "object"
+        properties:
+          timestamp:
+            type: "string"
+            format: "date-time"
+            description: "Current timestamp"
+          system_uptime:
+            type: "number"
+            minimum: 0
+            description: "System uptime in seconds"
+          last_user_activity:
+            type: "string"
+            format: "date-time"
+            description: "Timestamp of last user activity"
+          active_processes:
+            type: "array"
+            items:
+              type: "string"
+            description: "List of active processes"
+          cpu_usage:
+            type: "number"
+            minimum: 0
+            maximum: 100
+            description: "Current CPU usage percentage"
+          memory_usage:
+            type: "number"
+            minimum: 0
+            maximum: 100
+            description: "Current memory usage percentage"
+        required: ["timestamp", "system_uptime", "last_user_activity"]
+
+    - name: "user_context"
+      type: "json"
+      required: false
+      description: "Additional user context information"
+      schema:
+        type: "object"
+        properties:
+          current_task:
+            type: "string"
+            description: "User's current task or activity"
+          task_complexity:
+            type: "string"
+            enum: ["simple", "moderate", "complex"]
+            description: "Complexity level of current task"
+          stress_indicators:
+            type: "array"
+            items:
+              type: "string"
+            description: "Observed stress indicators"
+          work_environment:
+            type: "object"
+            properties:
+              lighting:
+                type: "string"
+                enum: ["bright", "dim", "dark"]
+              noise_level:
+                type: "string"
+                enum: ["quiet", "moderate", "loud"]
+              temperature:
+                type: "number"
+                description: "Room temperature in Celsius"
+
+  output:
+    - name: "energy_status"
+      type: "json"
+      required: true
+      description: "Current energy status assessment"
+      schema:
+        type: "object"
+        properties:
+          status:
+            type: "string"
+            enum: ["LOW", "SUBOPTIMAL", "NORMAL"]
+            description: "Current energy status level"
+          sleep_hours:
+            type: "number"
+            minimum: 0
+            maximum: 24
+            description: "Estimated hours of sleep"
+          confidence:
+            type: "number"
+            minimum: 0
+            maximum: 1
+            description: "Confidence level of the assessment"
+          recommendations:
+            type: "array"
+            items:
+              type: "string"
+            description: "Recommended actions for user"
+          restrictions:
+            type: "object"
+            properties:
+              max_response_length:
+                type: "integer"
+                description: "Maximum response length allowed"
+              allowed_complexity:
+                type: "string"
+                enum: ["simple", "moderate", "full"]
+                description: "Allowed response complexity level"
+              complex_reasoning_enabled:
+                type: "boolean"
+                description: "Whether complex reasoning is allowed"
+          timestamp:
+            type: "string"
+            format: "date-time"
+            description: "Assessment timestamp"
+          next_check:
+            type: "string"
+            format: "date-time"
+            description: "Next scheduled check time"
+        required: ["status", "sleep_hours", "confidence", "timestamp"]
+
+    - name: "alerts"
+      type: "json"
+      required: false
+      description: "Generated alerts and reminders"
+      schema:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            type:
+              type: "string"
+              enum: ["rest_reminder", "break_reminder", "sleep_warning", "overwork_alert"]
+            message:
+              type: "string"
+              description: "Alert message"
+            severity:
+              type: "string"
+              enum: ["info", "warning", "critical"]
+            action_required:
+              type: "boolean"
+              description: "Whether user action is required"
+            dismissible:
+              type: "boolean"
+              description: "Whether alert can be dismissed"
+
+# 权限要求
+permissions:
+  - name: "monitor_system"
+    description: "Access to system monitoring data"
+    required: true
+  - name: "read_user_activity"
+    description: "Read access to user activity patterns"
+    required: true
+  - name: "write_status_updates"
+    description: "Write access to energy status updates"
+    required: true
+  - name: "send_notifications"
+    description: "Send notifications and alerts to user"
+    required: false
+
+# 资源限制
+resources:
+  memory_limit: "50MB"
+  cpu_limit: "0.3"
+  timeout: 10
+  max_concurrent_requests: 20
+
+# 健康检查
+health_check:
+  endpoint: "/health"
+  timeout: 3
+  interval: 30
+
+# 监控指标
+metrics:
+  - name: "monitoring_checks"
+    type: "counter"
+    description: "Total number of monitoring checks performed"
+  - name: "energy_status_changes"
+    type: "counter"
+    description: "Number of energy status level changes"
+    labels: ["from_status", "to_status"]
+  - name: "alerts_generated"
+    type: "counter"
+    description: "Number of alerts generated by type"
+    labels: ["alert_type"]
+  - name: "sleep_detection_accuracy"
+    type: "gauge"
+    description: "Accuracy of sleep detection (when ground truth available)"
+  - name: "monitoring_duration"
+    type: "histogram"
+    description: "Duration of monitoring checks"
+    buckets: [0.001, 0.005, 0.01, 0.05, 0.1]
+
+# 环境变量
+environment:
+  - name: "SLEEP_GUARDIAN_CHECK_INTERVAL"
+    default: "300"
+    description: "Monitoring check interval in seconds"
+  - name: "SLEEP_GUARDIAN_LOG_LEVEL"
+    default: "INFO"
+    description: "Logging level for sleep guardian"
+  - name: "SLEEP_GUARDIAN_LOW_SLEEP_THRESHOLD"
+    default: "5"
+    description: "Hours of sleep threshold for LOW status"
+  - name: "SLEEP_GUARDIAN_OPTIMAL_SLEEP_THRESHOLD"
+    default: "7"
+    description: "Hours of sleep threshold for NORMAL status"
+
+# 安装配置
+installation:
+  requirements:
+    - "python>=3.8"
+    - "openclaw-core>=1.0.0"
+    - "system-monitor>=1.0.0"
+    - "psutil>=5.8.0"
+  files:
+    - "SKILL.md"
+    - "manifest.yaml"
+    - "sleep-guardian.js"
+    - "config/"
+    - "tests/"
+    - "docs/"
+
+# 版本历史
+changelog:
+  - version: "1.0.0"
+    date: "2026-04-12"
+    changes:
+      - "Initial release with comprehensive sleep and energy monitoring"
+      - "Real-time system activity monitoring"
+      - "Dynamic response adjustment based on energy levels"
+      - "Intelligent alert and reminder system"
+      - "Performance optimized for minimal resource usage"
+
+# 支持信息
+support:
+  documentation: "https://github.com/maxime-Xian/openclaw-cognitive-shield/blob/main/skills/sleep-guardian/README.md"
+  issues: "https://github.com/maxime-Xian/openclaw-cognitive-shield/issues"
+  contact: "support@openclaw-shield.com"
+  license_url: "https://github.com/maxime-Xian/openclaw-cognitive-shield/blob/main/LICENSE"
