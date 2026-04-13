@@ -153,7 +153,7 @@ This isn't just open source - it's **intellectually protected open source**.
 - ⚖️ **Commercial Licensing** - Free for learning, paid for business use
 - 🌍 **Global IP Protection** - International copyright and trademark coverage
 
-**Why?** Because real innovation deserves real protection. [Learn more about our IP protection](OPENCLAW_ORIGINALITY.md)
+**Why?** Because real innovation deserves real protection. [Learn more about our IP protection](OPENCLAW_ORIGINALITY_EN.md)
 
 ---
 
@@ -197,7 +197,7 @@ node shield/scripts/sleep-guardian.js
 - 💼 **Commercial**: $10k-$200k/year based on company size
 - 🏢 **Enterprise**: Custom licensing for large deployments
 
-[View complete licensing terms](OPENCLAW_COMMERCIAL_LICENSE.md)
+[View complete licensing terms](OPENCLAW_COMMERCIAL_LICENSE_EN.md)
 
 ---
 
